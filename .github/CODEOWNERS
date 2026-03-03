@@ -1,0 +1,12 @@
+# CODEOWNERS
+# ไฟล์นี้กำหนดว่าใครคือเจ้าของโค้ดในแต่ละส่วน
+# คนที่ถูกระบุจะต้อง Approve ก่อน Merge ได้
+
+# เจ้าของทั้ง Repository - DevOps
+* @oishi4770
+
+# ไฟล์ทดสอบใน tests/ - QA
+tests/ @NewmoodLev
+
+# GitHub config และ CI/CD - DevOps
+.github/ @oishi4770
