@@ -1,0 +1,36 @@
+name: Simple CI
+
+on:
+  push:
+    branches:
+      - main              # รัน workflow ทุกครั้งที่ push ไปยัง main
+
+jobs:
+
+  check-html:
+
+    runs-on: ubuntu-latest   # เครื่อง Ubuntu สะอาด → แก้ "Works on my machine!"
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4   # clone repo ลง runner
+
+      - name: ตรวจสอบว่า index.html มีอยู่จริง
+        run: |
+          if [ ! -f index.html ]; then
+            echo "❌ ERROR: ไม่พบ index.html"
+            exit 1         # exit 1 = บอก CI ว่า step นี้ FAIL
+          fi
+          echo "✅ พบไฟล์ index.html"
+
+      - name: ตรวจสอบว่ามี HTML tag
+        run: |
+          if ! grep -qi "<html" index.html; then
+            echo "❌ ERROR: ไม่พบ <html> tag"
+            exit 1
+          fi
+          echo "✅ พบ <html> tag"
+
+      - name: สรุปผล CI
+        run: echo "🎉 CI ผ่านทั้งหมด — พร้อม deploy"
