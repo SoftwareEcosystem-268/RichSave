@@ -266,7 +266,7 @@ export default function DealDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navigation isAuthenticated={!!user} userName={user?.name} />
-        <div className="pt-24 pb-8 px-4">
+        <div className="pt-32 pb-24 px-4">
           <div className="max-w-md mx-auto flex flex-col items-center">
             {/* Green checkmark */}
             <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-5">

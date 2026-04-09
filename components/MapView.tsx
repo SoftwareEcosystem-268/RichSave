@@ -15,7 +15,7 @@ interface MapViewProps {
 export default function MapView({ userLocation, deals, onDealClick, flyTo }: MapViewProps) {
   const mapRef = useRef<L.Map | null>(null)
   const mapContainerRef = useRef<HTMLDivElement>(null)
-  const markersRef = useRef<L.Marker[]>([])
+  const markerMapRef = useRef<Map<string, L.Marker>>(new Map())
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return
@@ -51,6 +51,7 @@ export default function MapView({ userLocation, deals, onDealClick, flyTo }: Map
     return () => {
       map.remove()
       mapRef.current = null
+      markerMapRef.current.clear()
     }
   }, [userLocation])
 
@@ -61,24 +62,52 @@ export default function MapView({ userLocation, deals, onDealClick, flyTo }: Map
 
   useEffect(() => {
     if (!mapRef.current) return
-    markersRef.current.forEach(m => m.remove())
-    markersRef.current = []
 
-    const markers: L.Marker[] = []
+    // Get current deal IDs
+    const currentDealIds = new Set(deals.filter(d => d.location).map(d => d.id))
+
+    // Remove markers for deals that no longer exist
+    const markerMap = markerMapRef.current
+    for (const [dealId, marker] of markerMap.entries()) {
+      if (!currentDealIds.has(dealId)) {
+        marker.remove()
+        markerMap.delete(dealId)
+      }
+    }
+
+    // Add/update markers for current deals
     deals.forEach(deal => {
       if (!deal.location) return
+
+      // If marker already exists for this deal, remove it so we can recreate it
+      if (markerMap.has(deal.id)) {
+        markerMap.get(deal.id)!.remove()
+        markerMap.delete(deal.id)
+      }
+
       const icon = L.divIcon({
         className: '',
-        html: `<div style="background:#F97316;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,0.25);border:3px solid white;font-size:14px;cursor:pointer;color:white;font-weight:bold;">${deal.discount}</div>`,
+        html: `<div style="background:#F97316;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,0.25);border:3px solid white;font-size:14px;cursor:pointer;color:white;font-weight:bold;" data-deal-id="${deal.id}">${deal.discount}</div>`,
         iconSize: [44, 44],
         iconAnchor: [22, 22],
       })
+
       const marker = L.marker([deal.location.lat, deal.location.lng], { icon })
-      marker.on('click', () => onDealClick(deal))
+
+      // Store the deal ID directly on the marker for later retrieval
+      ;(marker as any).dealId = deal.id
+
+      marker.on('click', () => {
+        // Find the deal by ID from the CURRENT deals array
+        const currentDeal = deals.find(d => d.id === (marker as any).dealId)
+        if (currentDeal) {
+          onDealClick(currentDeal)
+        }
+      })
+
       marker.addTo(mapRef.current!)
-      markers.push(marker)
+      markerMap.set(deal.id, marker)
     })
-    markersRef.current = markers
   }, [deals, onDealClick])
 
   return <div ref={mapContainerRef} style={{ width: '100%', height: '100%' }} />
