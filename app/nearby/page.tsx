@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import Navigation from '@/components/Navigation'
@@ -102,6 +102,10 @@ export default function NearbyPage() {
   const router = useRouter()
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null)
+
+  const handleDealClick = useCallback((deal: Deal) => {
+    setSelectedDeal(deal)
+  }, [])
   const [deals, setDeals] = useState<Deal[]>([])
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
   const [searchText, setSearchText] = useState('')
@@ -226,7 +230,7 @@ export default function NearbyPage() {
           <MapView
             userLocation={userLocation}
             deals={deals}
-            onDealClick={setSelectedDeal}
+            onDealClick={handleDealClick}
             flyTo={flyTo}
           />
         ) : (
