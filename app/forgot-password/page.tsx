@@ -22,14 +22,11 @@ export default function ForgotPasswordPage() {
     setLoading(true)
 
     try {
-      // TODO: Replace with actual API call
-      // await fetch('/api/auth/forgot-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email }),
-      // })
-
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
       setStep('otp')
     } catch (err) {
       setError('Failed to send OTP. Please try again.')
@@ -45,14 +42,11 @@ export default function ForgotPasswordPage() {
 
     try {
       const otpValue = otp.join('')
-      // TODO: Replace with actual API call
-      // await fetch('/api/auth/verify-otp', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, otp: otpValue }),
-      // })
-
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await fetch('/api/auth/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp: otpValue }),
+      })
       setStep('reset')
     } catch (err) {
       setError('Invalid OTP. Please try again.')
@@ -78,14 +72,11 @@ export default function ForgotPasswordPage() {
     setLoading(true)
 
     try {
-      // TODO: Replace with actual API call
-      // await fetch('/api/auth/reset-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // })
-
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
       router.push('/login')
     } catch (err) {
       setError('Failed to reset password. Please try again.')
