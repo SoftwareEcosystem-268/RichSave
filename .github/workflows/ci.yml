@@ -1,36 +1,46 @@
-name: Simple CI
+name: CI + CD Pipeline
 
 on:
   push:
-    branches:
-      - main              # รัน workflow ทุกครั้งที่ push ไปยัง main
+    branches: [main]
 
 jobs:
-
-  check-html:
-
-    runs-on: ubuntu-latest   # เครื่อง Ubuntu สะอาด → แก้ "Works on my machine!"
-
+  test:
+    runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout repository
-        uses: actions/checkout@v4   # clone repo ลง runner
-
-      - name: ตรวจสอบว่า index.html มีอยู่จริง
+      - uses: actions/checkout@v4
+      - name: Check HTML exists
+        run: test -f index.html
+      - name: Validate HTML structure
         run: |
-          if [ ! -f index.html ]; then
-            echo "❌ ERROR: ไม่พบ index.html"
-            exit 1         # exit 1 = บอก CI ว่า step นี้ FAIL
-          fi
-          echo "✅ พบไฟล์ index.html"
+          grep -q '<html' index.html
+          grep -q '<head' index.html
+          grep -q '<body' index.html
+          echo "✅ HTML structure valid"
 
-      - name: ตรวจสอบว่ามี HTML tag
-        run: |
-          if ! grep -qi "<html" index.html; then
-            echo "❌ ERROR: ไม่พบ <html> tag"
-            exit 1
-          fi
-          echo "✅ พบ <html> tag"
-
-      - name: สรุปผล CI
-        run: echo "🎉 CI ผ่านทั้งหมด — พร้อม deploy"
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "🚀 Deploying to ${{ secrets.DEPLOY_PATH }}..."
+            mkdir -p ${{ secrets.DEPLOY_PATH }}
+            cd ${{ secrets.DEPLOY_PATH }}
+            # Clean old files
+            rm -f *.html *.css *.js
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "index.html"
+          target: ${{ secrets.DEPLOY_PATH }}
