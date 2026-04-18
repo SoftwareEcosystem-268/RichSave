@@ -21,7 +21,7 @@ export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
       from: 'RichSave <onboarding@resend.dev>',
       to,
       subject,
-      html: html || text,
+      html: html || text || '',
     })
 
     if (error) {
