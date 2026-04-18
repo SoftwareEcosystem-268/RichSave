@@ -79,7 +79,7 @@ export class UserModel {
     const db = await getDb()
     const result = await db.collection(UserCollection).updateOne(
       { _id: new ObjectId(userId) },
-      { $pull: { favorites: dealId }, $set: { updatedAt: new Date() } }
+      { $pull: { favorites: dealId } as any, $set: { updatedAt: new Date() } }
     )
     return result
   }
