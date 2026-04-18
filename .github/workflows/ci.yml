@@ -60,7 +60,7 @@ jobs:
           command_timeout: 30m
           script: |
             cd ${{ secrets.DEPLOY_PATH }}
-            npm ci --omit=dev
+            npm install --omit=dev --prefer-offline
             pm2 restart alpha || pm2 start npm --name "alpha" -- start
             pm2 save
 
