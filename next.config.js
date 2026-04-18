@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   basePath: "/alpha",
+  assetPrefix: "/alpha",
   images: {
     domains: ["localhost", "images.unsplash.com", "api.mapbox.com"],
   },
