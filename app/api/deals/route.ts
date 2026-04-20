@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { DealModel } from "@/lib/models";
 import { getUserFromToken } from "@/lib/auth";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const MOCK_DEALS = [
   {
