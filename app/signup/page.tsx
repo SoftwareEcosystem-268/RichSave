@@ -79,8 +79,8 @@ export default function SignupPage() {
 
         {/* Logo */}
         <div className="flex flex-col items-center mb-6 py-6 px-4">
-          <Image src="/logo.svg" alt="RichSave Logo" width={64} height={64} className="mb-3" />
-          <Image src="/message.svg" alt="RichSave" width={140} height={30} className="mb-2" />
+          <Image src="/alpha/logo.svg" alt="RichSave Logo" width={64} height={64} className="mb-3" />
+          <Image src="/alpha/message.svg" alt="RichSave" width={140} height={30} className="mb-2" />
           <p className="text-[#2563EB] text-sm font-medium">ใช้เท่าเดิม แต่คุ้มกว่าเดิม</p>
         </div>
 

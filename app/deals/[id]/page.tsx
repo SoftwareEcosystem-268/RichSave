@@ -88,6 +88,25 @@ export default function DealDetailPage() {
     setView('qr')
   }
 
+  const handleConfirmDeal = async () => {
+    if (deal) {
+      const savingsAmount = deal.originalPrice - deal.discountedPrice
+      try {
+        await fetch('/api/user/savings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            dealId: deal.id,
+            dealTitle: deal.title,
+            storeName: deal.storeName,
+            savings: savingsAmount,
+          }),
+        })
+      } catch {}
+    }
+    setView('success')
+  }
+
   const [copied, setCopied] = useState(false)
   const handleShare = async () => {
     const url = window.location.href
@@ -226,7 +245,7 @@ export default function DealDetailPage() {
               {/* Buttons — desktop only (inline), mobile uses fixed bar below */}
               <div className="hidden md:block space-y-2">
                 <button
-                  onClick={() => setView('success')}
+                  onClick={handleConfirmDeal}
                   className="w-full py-3.5 bg-blue-600 text-white font-semibold rounded-2xl text-base"
                 >
                   ยืนยันการใช้ดีล
@@ -245,7 +264,7 @@ export default function DealDetailPage() {
         {/* Mobile fixed bottom buttons */}
         <div className="md:hidden fixed bottom-16 left-0 right-0 bg-white border-t px-4 py-4 space-y-2 z-40">
           <button
-            onClick={() => setView('success')}
+            onClick={handleConfirmDeal}
             className="w-full py-3.5 bg-blue-600 text-white font-semibold rounded-2xl text-base"
           >
             ยืนยันการใช้ดีล

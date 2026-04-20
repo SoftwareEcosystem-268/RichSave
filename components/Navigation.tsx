@@ -16,11 +16,11 @@ export default function Navigation({ isAuthenticated = false, userName = '' }: N
   if (hideNavPaths.includes(pathname)) return null
 
   const navItems = [
-    { label: 'หน้าหลัก',   href: '/deals',     icon: '/navbar/home.svg',    iconActive: '/navbar/home-active.svg' },
-    { label: 'ใกล้ฉัน',    href: '/nearby',    icon: '/navbar/mark.svg',    iconActive: '/navbar/mark-active.svg' },
-    { label: 'รายการโปรด', href: '/favorites', icon: '/navbar/love.svg',    iconActive: '/navbar/love-active.svg' },
-    { label: 'ประหยัด',    href: '/savings',   icon: '/navbar/save.svg',    iconActive: '/navbar/save-active.svg' },
-    { label: 'โปรไฟล์',   href: '/profile',   icon: '/navbar/profile.svg', iconActive: '/navbar/profile-active.svg' },
+    { label: 'หน้าหลัก',   href: '/deals',     icon: '/alpha/navbar/home.svg',    iconActive: '/alpha/navbar/home-active.svg' },
+    { label: 'ใกล้ฉัน',    href: '/nearby',    icon: '/alpha/navbar/mark.svg',    iconActive: '/alpha/navbar/mark-active.svg' },
+    { label: 'รายการโปรด', href: '/favorites', icon: '/alpha/navbar/love.svg',    iconActive: '/alpha/navbar/love-active.svg' },
+    { label: 'ประหยัด',    href: '/savings',   icon: '/alpha/navbar/save.svg',    iconActive: '/alpha/navbar/save-active.svg' },
+    { label: 'โปรไฟล์',   href: '/profile',   icon: '/alpha/navbar/profile.svg', iconActive: '/alpha/navbar/profile-active.svg' },
   ]
 
   const handleLogout = () => {
@@ -36,8 +36,8 @@ export default function Navigation({ isAuthenticated = false, userName = '' }: N
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
-            <Image src="/logo.svg" alt="RichSave" width={40} height={40} style={{ width: 40, height: 'auto' }} />
-            <Image src="/message.svg" alt="RichSave" width={110} height={24} />
+            <Image src="/alpha/logo.svg" alt="RichSave" width={40} height={40} style={{ width: 40, height: 'auto' }} />
+            <Image src="/alpha/message.svg" alt="RichSave" width={110} height={24} />
           </div>
 
           {/* User */}

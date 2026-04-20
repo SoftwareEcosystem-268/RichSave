@@ -7,6 +7,10 @@ const sarabun = Sarabun({ subsets: ['thai', 'latin'], weight: ['400', '500', '60
 export const metadata: Metadata = {
   title: 'RichSave - Smart Savings & Deal Discovery',
   description: 'Discover amazing deals and track your savings with RichSave',
+  icons: {
+    icon: '/alpha/logo.svg',
+    apple: '/alpha/logo.svg',
+  },
 }
 
 export default function RootLayout({

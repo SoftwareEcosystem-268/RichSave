@@ -39,8 +39,8 @@ export default function Home() {
         <header className="p-6">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Image src="/logo.svg" alt="RichSave" width={44} height={44} />
-              <Image src="/message.svg" alt="RichSave" width={120} height={26} />
+              <Image src="/alpha/logo.svg" alt="RichSave" width={44} height={44} />
+              <Image src="/alpha/message.svg" alt="RichSave" width={120} height={26} />
             </div>
             <div className="flex gap-3">
               <button
