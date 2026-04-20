@@ -3,6 +3,8 @@ import { DealModel, RedemptionModel } from "@/lib/models";
 import { getUserFromToken } from "@/lib/auth";
 import { ObjectId } from "mongodb";
 
+export const dynamic = 'force-dynamic';
+
 const MOCK_DEALS: Record<string, any> = {
   "mock-1": {
     id: "mock-1",

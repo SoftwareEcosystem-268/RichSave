@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { UserModel } from '@/lib/models'
 import { getUserFromToken } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/user/favorites - Get user's favorite deals
 export async function GET(request: NextRequest) {
   try {

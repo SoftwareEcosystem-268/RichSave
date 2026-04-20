@@ -3,6 +3,8 @@ import { UserModel } from '@/lib/models'
 import { getUserFromToken } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/user/profile - Get user profile
 export async function GET(request: NextRequest) {
   try {

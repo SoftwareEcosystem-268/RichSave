@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { RedemptionModel, UserModel } from '@/lib/models'
 import { getUserFromToken } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 // GET /api/user/savings - Get user's savings data
 export async function GET(request: NextRequest) {
   try {

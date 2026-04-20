@@ -3,6 +3,8 @@ import { UserModel } from '@/lib/models'
 import { getUserFromToken } from '@/lib/auth'
 import bcrypt from 'bcryptjs'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const token = request.cookies.get('token')?.value
