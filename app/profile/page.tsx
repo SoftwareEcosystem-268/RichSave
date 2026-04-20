@@ -193,8 +193,8 @@ export default function ProfilePage() {
         <div>
           <p className="text-sm font-semibold text-gray-500 px-2 mb-2">บัญชี</p>
           <div className="bg-white rounded-3xl overflow-hidden shadow-sm divide-y divide-gray-100">
-            <MenuItem icon="/profile/setting.svg" label="แก้ไขโปรไฟล์" onClick={() => router.push('/profile/edit')} />
-            <MenuItem icon="/profile/noti.svg" label="การแจ้งเตือน" badge={3} onClick={() => router.push('/profile/notifications')} />
+            <MenuItem icon="/alpha/profile/setting.svg" label="แก้ไขโปรไฟล์" onClick={() => router.push('/profile/edit')} />
+            <MenuItem icon="/alpha/profile/noti.svg" label="การแจ้งเตือน" badge={3} onClick={() => router.push('/profile/notifications')} />
           </div>
         </div>
 
@@ -202,8 +202,8 @@ export default function ProfilePage() {
         <div>
           <p className="text-sm font-semibold text-gray-500 px-2 mb-2">การตั้งค่า</p>
           <div className="bg-white rounded-3xl overflow-hidden shadow-sm divide-y divide-gray-100">
-            <MenuItem icon="/profile/priv.svg" label="ความเป็นส่วนตัว" onClick={() => router.push('/privacy')} />
-            <MenuItem icon="/profile/lock.svg" label="เปลี่ยนรหัสผ่าน" onClick={() => setShowPasswordModal(true)} />
+            <MenuItem icon="/alpha/profile/priv.svg" label="ความเป็นส่วนตัว" onClick={() => router.push('/privacy')} />
+            <MenuItem icon="/alpha/profile/lock.svg" label="เปลี่ยนรหัสผ่าน" onClick={() => setShowPasswordModal(true)} />
           </div>
         </div>
 
@@ -211,8 +211,8 @@ export default function ProfilePage() {
         <div>
           <p className="text-sm font-semibold text-gray-500 px-2 mb-2">อื่นๆ</p>
           <div className="bg-white rounded-3xl overflow-hidden shadow-sm divide-y divide-gray-100">
-            <MenuItem icon="/profile/help.svg" label="ช่วยเหลือและสนับสนุน" onClick={() => router.push('/profile/help')} />
-            <MenuItem icon="/profile/question.svg" label="ส่งความคิดเห็น" onClick={() => router.push('/profile/feedback')} />
+            <MenuItem icon="/alpha/profile/help.svg" label="ช่วยเหลือและสนับสนุน" onClick={() => router.push('/profile/help')} />
+            <MenuItem icon="/alpha/profile/question.svg" label="ส่งความคิดเห็น" onClick={() => router.push('/profile/feedback')} />
           </div>
         </div>
 

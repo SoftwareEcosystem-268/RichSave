@@ -7,10 +7,10 @@ import Navigation from '@/components/Navigation'
 import DealCard, { Deal } from '@/components/DealCard'
 
 const categories = [
-  { id: 'Food', label: 'อาหาร', icon: '/food.svg' },
-  { id: 'Drinks', label: 'เครื่องดื่ม', icon: '/drink.svg' },
-  { id: 'Shopping', label: 'ช้อปปิ้ง', icon: '/shopping.svg' },
-  { id: 'Entertainment', label: 'บันเทิง', icon: '/joyful.svg' },
+  { id: 'Food', label: 'อาหาร', icon: '/alpha/food.svg' },
+  { id: 'Drinks', label: 'เครื่องดื่ม', icon: '/alpha/drink.svg' },
+  { id: 'Shopping', label: 'ช้อปปิ้ง', icon: '/alpha/shopping.svg' },
+  { id: 'Entertainment', label: 'บันเทิง', icon: '/alpha/joyful.svg' },
 ]
 
 export default function DealsPage() {

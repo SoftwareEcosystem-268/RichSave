@@ -214,6 +214,17 @@ export class RedemptionModel {
     return result[0]?.total || 0
   }
 
+  static async getTodaySavings(userId: string) {
+    const db = await getDb()
+    const startOfDay = new Date()
+    startOfDay.setHours(0, 0, 0, 0)
+    const result = await db.collection(RedemptionCollection).aggregate([
+      { $match: { userId: new ObjectId(userId), redeemedAt: { $gte: startOfDay } } },
+      { $group: { _id: null, total: { $sum: '$savings' } } },
+    ]).toArray()
+    return result[0]?.total || 0
+  }
+
   static async getMonthlySavings(userId: string, months = 6) {
     const db = await getDb()
     const startDate = new Date()

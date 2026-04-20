@@ -23,6 +23,9 @@ export async function GET(request: NextRequest) {
     // Get total savings
     const totalSavings = await RedemptionModel.getTotalSavings(user.userId);
 
+    // Get today savings
+    const todaySavings = await RedemptionModel.getTodaySavings(user.userId);
+
     // Get monthly savings
     const monthlySavings = await RedemptionModel.getMonthlySavings(
       user.userId,
@@ -41,6 +44,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         totalSavings,
+        todaySavings,
         dealsRedeemed: dealCount,
         avgSavingsPerDeal: dealCount > 0 ? totalSavings / dealCount : 0,
         monthlySavings: monthlySavings.map((m) => ({
@@ -64,6 +68,46 @@ export async function GET(request: NextRequest) {
     console.error("Get savings error:", error);
     return NextResponse.json(
       { error: "Failed to fetch savings data" },
+      { status: 500 },
+    );
+  }
+}
+
+// POST /api/user/savings - Record a deal redemption
+export async function POST(request: NextRequest) {
+  try {
+    const token = request.cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = getUserFromToken(token);
+    if (!user) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    const { ObjectId } = await import("mongodb");
+    const body = await request.json();
+    const { dealId, dealTitle, storeName, savings } = body;
+
+    if (!dealId || !dealTitle || !storeName || savings == null) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    await RedemptionModel.create({
+      userId: new ObjectId(user.userId),
+      dealId: String(dealId),
+      dealTitle: String(dealTitle),
+      storeName: String(storeName),
+      savings: Number(savings),
+      redeemedAt: new Date(),
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Record redemption error:", error);
+    return NextResponse.json(
+      { error: "Failed to record redemption" },
       { status: 500 },
     );
   }

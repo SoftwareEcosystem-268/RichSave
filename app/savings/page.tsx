@@ -59,6 +59,7 @@ export default function SavingsPage() {
   const router = useRouter()
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
   const [loading, setLoading] = useState(true)
+  const [apiLoaded, setApiLoaded] = useState(false)
   const [savings, setSavings] = useState({
     total: 0, today: 0, thisMonth: 0, thisYear: 0,
     recentRedemptions: [] as Array<{ id: string; title: string; storeName: string; savings: number; date: Date }>,
@@ -80,6 +81,7 @@ export default function SavingsPage() {
             thisYear: data.data.totalSavings ?? 0,
             recentRedemptions: (data.data.recentRedemptions ?? []).map((r: any) => ({ ...r, date: new Date(r.date) })),
           })
+          setApiLoaded(true)
         }
       })
       .catch(() => {})
@@ -94,14 +96,14 @@ export default function SavingsPage() {
     )
   }
 
-  // Use API data if available, else mock
-  const total      = savings.total     || MOCK.total
-  const today      = savings.today     || MOCK.today
-  const thisMonth  = savings.thisMonth || MOCK.thisMonth
-  const thisYear   = savings.thisYear  || MOCK.thisYear
+  // Use API data if loaded, else mock
+  const total      = apiLoaded ? savings.total     : MOCK.total
+  const today      = apiLoaded ? savings.today     : MOCK.today
+  const thisMonth  = apiLoaded ? savings.thisMonth : MOCK.thisMonth
+  const thisYear   = apiLoaded ? savings.thisYear  : MOCK.thisYear
   const catTotal   = MOCK.categories.reduce((s, c) => s + c.value, 0)
 
-  const activity = savings.recentRedemptions.length > 0
+  const activity = (apiLoaded && savings.recentRedemptions.length > 0)
     ? savings.recentRedemptions.slice(0, 5).map(r => ({
         id: r.id, title: r.title, store: r.storeName,
         savings: r.savings, when: r.date.toLocaleDateString('th-TH'), emoji: '🏷️',
