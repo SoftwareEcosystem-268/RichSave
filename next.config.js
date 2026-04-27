@@ -2,8 +2,21 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['localhost', 'images.unsplash.com', 'api.mapbox.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.mapbox.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 }
 
-module.exports = nextConfig
+export default nextConfig
