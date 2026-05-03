@@ -26,6 +26,41 @@ A modern full-stack web application for discovering deals, tracking savings, and
 - **Maps**: Leaflet (OpenStreetMap)
 - **QR Codes**: qrcode library
 
+## Vision & Goals
+
+**Problem Statement**
+
+Most Thai people lack personal finance management habits because typical expense-tracking apps require a high level of self-discipline to log data manually — and they don't actually help users make better spending decisions in real life. As a result, many students have no idea where their money went and struggle to save, even when they intend to.
+
+**Solution**
+
+RichSave bridges expense tracking with real-time nearby food deal recommendations, enabling users to save money starting from their very first meal — no need to "plan finances" first. Unlike conventional budgeting apps that only record money already spent, RichSave helps users make smarter decisions before they spend.
+
+**Target Users**
+
+Primary: Gen Z (ages 16–27)
+Secondary: Late Gen Alpha (ages 12–15) and their parents
+
+**Success Metrics**
+| Metric | Target | Current |
+|------|------|------|
+| Monthly active users | 1,000 users within 3 months | — |
+| Day-30 retention rate | ≥ 40% | — |
+| Deals used per user / month | ≥ 5 times | — |
+| Average money saved per user / month | ≥ 300 THB | — |
+
+## Roadmap
+
+| Task | Team | Status |
+|----|----|------|
+| Design Dashboard UI | Design | 🟢 Done |
+| Authentication system (register / login) | Backend | 🟢 Done |
+| API for fetching nearby food deals | Backend | 🟢 Done |
+| Deal listing page with filters | Frontend | 🟢 Done |
+| Favorites / saved deals system | Frontend | 🟢 Done |
+| GPS / Location permission integration | Frontend | 🟢 Done |
+
+
 ## Prerequisites
 
 - Node.js 18+ and npm
