@@ -134,7 +134,6 @@ ${markdown
   .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
   .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
   .replace(/\n\n/g, '</p><p>')
-  .replace(/^(?!<[hp])<p>/gm, '<p>')
   .replace(/<p><h/g, '<h')
   .replace(/<\/h(\d+)><\/p>/g, '</h$1>')
   .replace(/<p><t(abl|r)/g, '<t$1')
