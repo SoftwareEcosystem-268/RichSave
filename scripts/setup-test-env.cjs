@@ -24,7 +24,7 @@ const TEST_PASSWORD = process.env.TEST_PASSWORD || 'Test@123456';
 
 console.log('📋 Test Configuration:');
 console.log(`   Email: ${TEST_EMAIL}`);
-console.log(`   Password: ${TEST_PASSWORD}\n`);
+console.log('   Password: [REDACTED]\n');
 
 // 3. Wait for server to be ready
 console.log('⏳ Waiting for server...');
