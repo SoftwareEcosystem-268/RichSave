@@ -91,7 +91,10 @@ export async function POST(request: NextRequest) {
     const { dealId, dealTitle, storeName, savings } = body;
 
     if (!dealId || !dealTitle || !storeName || savings == null) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 },
+      );
     }
 
     await RedemptionModel.create({

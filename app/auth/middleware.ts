@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getUserFromToken } from './lib/auth'
+import { getUserFromToken } from '../../../lib/auth'
 
 // Public paths that don't require authentication
 const publicPaths = ['/', '/login', '/signup', '/forgot-password', '/reset-password', '/privacy', '/deals', '/nearby']
 
-export function middleware(request: NextRequest) {
+export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Skip middleware for API routes (they handle their own auth)

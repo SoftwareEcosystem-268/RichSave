@@ -2,6 +2,7 @@
   "name": "richsave",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,17 +12,27 @@
     "test": "jest",
     "test:unit": "jest --testPathPattern=\\.unit\\.test\\.",
     "test:e2e": "playwright test",
+    "test:e2e:pdf": "playwright test && node scripts/save-report-as-pdf.js",
+    "test:e2e:auth:pdf": "playwright test auth/ && node scripts/save-report-as-pdf.js auth",
+    "test:e2e:auth": "playwright test auth/",
+    "test:e2e:deal:pdf": "playwright test deal/ && node scripts/save-report-as-pdf.js deal",
+    "test:e2e:location:pdf": "playwright test location/ && node scripts/save-report-as-pdf.js location",
+    "test:e2e:favorites:pdf": "playwright test favorites/ && node scripts/save-report-as-pdf.js favorites",
+    "test:e2e:savings:pdf": "playwright test savings/ && node scripts/save-report-as-pdf.js savings",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "test:ci": "jest --ci --coverage --maxWorkers=2"
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "report:pdf": "node scripts/save-report-as-pdf.js",
+    "report:show": "npx playwright show-report"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.90.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^17.3.1",
     "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
     "mongodb": "^6.3.0",
-    "next": "^14.2.0",
+    "next": "^16.2.4",
     "qrcode": "^1.5.3",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
@@ -49,5 +60,22 @@
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.0"
-  }
+  },
+  "description": "A modern full-stack web application for discovering deals, tracking savings, and managing your budget. Built with Next.js, MongoDB, and Tailwind CSS.",
+  "main": "jest.config.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoftwareEcosystem-268/alpha.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SoftwareEcosystem-268/alpha/issues"
+  },
+  "homepage": "https://github.com/SoftwareEcosystem-268/alpha#readme"
 }
