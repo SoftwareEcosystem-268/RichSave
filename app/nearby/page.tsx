@@ -1,270 +1,281 @@
-'use client'
+﻿'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import Navigation from '@/components/Navigation'
-import DealCard, { Deal } from '@/components/DealCard'
+import { Deal } from '@/components/DealCard'
 
-// Dynamic import for map to avoid SSR issues
 const MapView = dynamic(() => import('@/components/MapView'), {
   ssr: false,
   loading: () => (
-    <div className="h-96 bg-gray-200 rounded-2xl flex items-center justify-center">
-      <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
+    <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+      <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full"></div>
     </div>
   ),
 })
 
-// Mock deals with location data
-const nearbyDeals: Deal[] = [
-  {
-    id: '1',
-    title: '50% Off All Pizzas',
-    description: 'Get half price on all large and medium pizzas.',
-    discount: '50%',
-    originalPrice: 30,
-    discountedPrice: 15,
-    storeName: "Domino's Pizza",
-    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800',
-    category: 'Food',
-    location: { lat: 40.7128, lng: -74.006, address: '123 Main St, New York, NY' },
-    expiresAt: '2026-04-30',
-  },
-  {
-    id: '2',
-    title: '30% Off Running Shoes',
-    description: 'Save big on all running shoes from top brands.',
-    discount: '30%',
-    originalPrice: 150,
-    discountedPrice: 105,
-    storeName: 'Nike Store',
-    image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800',
-    category: 'Shopping',
-    location: { lat: 40.7228, lng: -74.016, address: '456 Broadway, New York, NY' },
-    expiresAt: '2026-04-15',
-  },
-  {
-    id: '3',
-    title: 'Buy 1 Get 1 Free Burgers',
-    description: 'Purchase any burger and get the second one free!',
-    discount: 'BOGO',
-    originalPrice: 12,
-    discountedPrice: 6,
-    storeName: 'Burger King',
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800',
-    category: 'Food',
-    location: { lat: 40.7028, lng: -73.996, address: '789 5th Ave, New York, NY' },
-    expiresAt: '2026-04-20',
-  },
-  {
-    id: '4',
-    title: '40% Off Electronics',
-    description: 'Massive savings on laptops and accessories.',
-    discount: '40%',
-    originalPrice: 999,
-    discountedPrice: 599,
-    storeName: 'Best Buy',
-    image: 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=800',
-    category: 'Electronics',
-    location: { lat: 40.7328, lng: -73.986, address: '321 W 34th St, New York, NY' },
-    expiresAt: '2026-04-10',
-  },
-  {
-    id: '5',
-    title: 'Free Coffee with Purchase',
-    description: 'Get a free coffee when you buy any breakfast item.',
-    discount: 'FREE',
-    originalPrice: 5,
-    discountedPrice: 0,
-    storeName: 'Starbucks',
-    image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800',
-    category: 'Food',
-    location: { lat: 40.7428, lng: -74.026, address: '888 Madison Ave, New York, NY' },
-    expiresAt: '2026-04-12',
-  },
+const DISCOUNTS = ['10%', '15%', '20%', '25%', '30%', '35%', '40%', '50%']
+const FOOD_IMAGES = [
+  'https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop',
 ]
+const DRINK_IMAGES = [
+  'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop',
+  'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop',
+]
+const SHOP_IMAGES = [
+  'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&h=300&fit=crop',
+]
+const ENT_IMAGES = [
+  'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=300&fit=crop',
+]
+
+function getCategory(amenity: string, shop: string): string {
+  if (['cafe', 'bar', 'bubble_tea'].includes(amenity) || ['coffee', 'tea', 'beverages'].includes(shop)) return 'Drinks'
+  if (['cinema', 'theatre', 'nightclub'].includes(amenity)) return 'Entertainment'
+  if (shop && ['clothing', 'supermarket', 'convenience', 'mall', 'department_store', 'shoes', 'fashion'].includes(shop)) return 'Shopping'
+  return 'Food'
+}
+
+function getImage(category: string, idx: number): string {
+  if (category === 'Drinks') return DRINK_IMAGES[idx % DRINK_IMAGES.length]
+  if (category === 'Shopping') return SHOP_IMAGES[idx % SHOP_IMAGES.length]
+  if (category === 'Entertainment') return ENT_IMAGES[idx % ENT_IMAGES.length]
+  return FOOD_IMAGES[idx % FOOD_IMAGES.length]
+}
+
+function makeDiscount(category: string, idx: number) {
+  const pct = DISCOUNTS[idx % DISCOUNTS.length]
+  const p = parseInt(pct)
+  const bases: Record<string, number[]> = {
+    Food: [80, 120, 150, 200, 250, 300],
+    Drinks: [50, 65, 80, 95, 120],
+    Shopping: [200, 350, 500, 700, 990],
+    Entertainment: [120, 150, 200, 250],
+  }
+  const baseArr = bases[category] || bases.Food
+  const original = baseArr[idx % baseArr.length]
+  const discounted = Math.round(original * (1 - p / 100))
+  return { discount: pct, originalPrice: original, discountedPrice: discounted }
+}
+
+async function fetchNearbyPlaces(lat: number, lng: number, signal?: AbortSignal): Promise<Deal[]> {
+  const query = `[out:json][timeout:15];(node["amenity"~"restaurant|cafe|fast_food|bar|food_court|cinema"](around:2500,${lat},${lng});node["shop"~"clothing|supermarket|convenience|bakery|coffee|fashion|shoes"](around:2500,${lat},${lng}););out body;`
+  const res = await fetch('https://overpass-api.de/api/interpreter', {
+    method: 'POST',
+    body: query,
+    signal,
+  })
+  const data = await res.json()
+  return (data.elements as any[])
+    .filter((el) => el.tags?.name)
+    .slice(0, 25)
+    .map((el, i) => {
+      const amenity = el.tags.amenity || ''
+      const shop = el.tags.shop || ''
+      const category = getCategory(amenity, shop)
+      const { discount, originalPrice, discountedPrice } = makeDiscount(category, i)
+      return {
+        id: `osm-${el.id}`,
+        title: `${el.tags.name} โปรพิเศษ`,
+        description: el.tags.cuisine ? `อาหาร ${el.tags.cuisine}` : `โปรโมชันพิเศษจากร้าน ${el.tags.name}`,
+        discount,
+        originalPrice,
+        discountedPrice,
+        storeName: el.tags.name,
+        category,
+        image: getImage(category, i),
+        location: {
+          lat: el.lat,
+          lng: el.lon,
+          address: el.tags['addr:street'] || el.tags['addr:full'] || el.tags.name,
+        },
+        expiresAt: new Date(Date.now() + ((7 + i * 3) % 30 + 1) * 86400000).toISOString(),
+        terms: ['ใช้ได้ 1 ครั้งต่อคน', 'ไม่สามารถใช้ร่วมกับโปรโมชันอื่น'],
+      } as Deal
+    })
+}
 
 export default function NearbyPage() {
   const router = useRouter()
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null)
-  const [favorites, setFavorites] = useState<Set<string>>(new Set())
+
+  const handleDealClick = useCallback((deal: Deal) => {
+    setSelectedDeal(deal)
+  }, [])
+  const [deals, setDeals] = useState<Deal[]>([])
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
-  const [mapView, setMapView] = useState<'map' | 'list'>('map')
+  const [searchText, setSearchText] = useState('')
+  const [flyTo, setFlyTo] = useState<{ lat: number; lng: number; zoom?: number } | undefined>()
+  const [searching, setSearching] = useState(false)
+  const [loadingPlaces, setLoadingPlaces] = useState(false)
+
+  const defaultCenter = { lat: 18.2866, lng: 99.4951 }
+
+  const getMockDealsWithLocation = (centerLat: number, centerLng: number): Deal[] => [
+    { id: 'mock-1', title: 'ซูปเปอร์แซ่บ โปรพิเศษ', description: 'ตำปูปลาร้า + คอหมูย่าง', discount: '35%', originalPrice: 115, discountedPrice: 74, storeName: 'ซูปเปอร์แซ่บ', category: 'Food', image: FOOD_IMAGES[0], location: { lat: centerLat + 0.003, lng: centerLng - 0.002, address: 'ใกล้มธ.ลำปาง' }, expiresAt: new Date(Date.now() + 7*86400000).toISOString(), terms: ['ใช้ได้ 1 ครั้งต่อคน'] },
+    { id: 'mock-2', title: 'Pizza Hut ส่วนลดพิเศษ', description: 'พิซซ่าซื้อ 1 แถม 1', discount: '40%', originalPrice: 350, discountedPrice: 210, storeName: 'Pizza Hut', category: 'Food', image: FOOD_IMAGES[1], location: { lat: centerLat - 0.004, lng: centerLng + 0.005, address: 'Central ลำปาง' }, expiresAt: new Date(Date.now() + 2*86400000).toISOString(), terms: ['ใช้ได้ที่สาขาร่วมรายการ'] },
+    { id: 'mock-3', title: 'Amazon Coffee กาแฟลด 20%', description: 'กาแฟและเครื่องดื่มทุกแก้ว', discount: '20%', originalPrice: 80, discountedPrice: 64, storeName: 'Amazon Coffee', category: 'Drinks', image: DRINK_IMAGES[0], location: { lat: centerLat + 0.001, lng: centerLng + 0.003, address: 'ใกล้มธ.ลำปาง' }, expiresAt: new Date(Date.now() + 14*86400000).toISOString(), terms: ['ใช้ได้ 1 ครั้งต่อวัน'] },
+    { id: 'mock-4', title: "Swensen's Ice Cream", description: 'ซื้อ 1 แถม 1 ไอศกรีม', discount: '50%', originalPrice: 120, discountedPrice: 60, storeName: "Swensen's", category: 'Food', image: FOOD_IMAGES[2], location: { lat: centerLat - 0.002, lng: centerLng - 0.004, address: 'Central ลำปาง' }, expiresAt: new Date(Date.now() + 5*86400000).toISOString(), terms: ['ใช้ได้เฉพาะวันธรรมดา'] },
+    { id: 'mock-5', title: 'Major Cineplex ลด 30%', description: 'ตั๋วหนังทุกรอบวันธรรมดา', discount: '30%', originalPrice: 200, discountedPrice: 140, storeName: 'Major Cineplex', category: 'Entertainment', image: ENT_IMAGES[0], location: { lat: centerLat + 0.005, lng: centerLng + 0.001, address: 'Central ลำปาง' }, expiresAt: new Date(Date.now() + 10*86400000).toISOString(), terms: ['ใช้ได้เฉพาะวันจันทร์-ศุกร์'] },
+    { id: 'mock-6', title: 'Starbucks Happy Hour กาแฟ', description: 'กาแฟ Frappuccino ลด 50%', discount: '50%', originalPrice: 165, discountedPrice: 83, storeName: 'Starbucks', category: 'Drinks', image: DRINK_IMAGES[1], location: { lat: centerLat - 0.005, lng: centerLng + 0.002, address: 'Central ลำปาง' }, expiresAt: new Date(Date.now() + 1*86400000).toISOString(), terms: ['ใช้ได้ 14:00-17:00 เท่านั้น'] },
+    { id: 'mock-7', title: 'Uniqlo ลดทั้งร้าน', description: 'เสื้อผ้าทุกชิ้นลด 25%', discount: '25%', originalPrice: 590, discountedPrice: 443, storeName: 'Uniqlo', category: 'Shopping', image: SHOP_IMAGES[0], location: { lat: centerLat + 0.002, lng: centerLng - 0.005, address: 'Central ลำปาง' }, expiresAt: new Date(Date.now() + 3*86400000).toISOString(), terms: ['เฉพาะสุดสัปดาห์'] },
+    { id: 'mock-8', title: 'บ้านสลัด สดใหม่', description: 'สลัดผักออร์แกนิคราคาพิเศษ', discount: '15%', originalPrice: 89, discountedPrice: 76, storeName: 'บ้านสลัด', category: 'Food', image: FOOD_IMAGES[0], location: { lat: centerLat - 0.001, lng: centerLng - 0.003, address: 'ถ.พหลโยธิน ลำปาง' }, expiresAt: new Date(Date.now() + 30*86400000).toISOString(), terms: ['ใช้ได้ทุกวัน'] },
+  ]
+
+  const loadPlaces = async (lat: number, lng: number) => {
+    setLoadingPlaces(true)
+    // Always load mock deals immediately so pins show up
+    setDeals(getMockDealsWithLocation(lat, lng))
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 8000)
+      const places = await fetchNearbyPlaces(lat, lng, controller.signal)
+      clearTimeout(timeout)
+      if (places.length >= 3) {
+        setDeals(places)
+      }
+      // else keep the mock deals already set
+    } catch {
+      // keep mock deals already set
+    } finally {
+      setLoadingPlaces(false)
+    }
+  }
 
   useEffect(() => {
-    // Check authentication
     const userData = localStorage.getItem('user')
-    if (userData) {
-      setUser(JSON.parse(userData))
-    }
+    if (userData) setUser(JSON.parse(userData))
 
-    // Load favorites
-    const savedFavorites = localStorage.getItem('favorites')
-    if (savedFavorites) {
-      setFavorites(new Set(JSON.parse(savedFavorites)))
-    }
-
-    // Get user location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          })
+        (pos) => {
+          const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude }
+          setUserLocation(loc)
+          loadPlaces(loc.lat, loc.lng)
         },
-        (error) => {
-          console.log('Geolocation error:', error)
-          // Default to New York if location not available
-          setUserLocation({ lat: 40.7128, lng: -74.006 })
+        () => {
+          setUserLocation(defaultCenter)
+          loadPlaces(defaultCenter.lat, defaultCenter.lng)
         }
       )
     } else {
-      // Default location
-      setUserLocation({ lat: 40.7128, lng: -74.006 })
+      setUserLocation(defaultCenter)
+      loadPlaces(defaultCenter.lat, defaultCenter.lng)
     }
   }, [])
 
-  const handleToggleFavorite = (dealId: string) => {
-    const newFavorites = new Set(favorites)
-    if (newFavorites.has(dealId)) {
-      newFavorites.delete(dealId)
-    } else {
-      newFavorites.add(dealId)
-    }
-    setFavorites(newFavorites)
-    localStorage.setItem('favorites', JSON.stringify([...newFavorites]))
+  const handleLocationSearch = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const q = searchText.trim()
+    if (!q) return
+    setSearching(true)
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`,
+        { headers: { 'Accept-Language': 'th,en' } }
+      )
+      const data = await res.json()
+      if (data.length > 0) {
+        const newLat = parseFloat(data[0].lat)
+        const newLng = parseFloat(data[0].lon)
+        setFlyTo({ lat: newLat, lng: newLng, zoom: 15 })
+        loadPlaces(newLat, newLng)
+      }
+    } catch {}
+    setSearching(false)
   }
 
-  const dealsWithFavorite = nearbyDeals.map(deal => ({
-    ...deal,
-    isFavorite: favorites.has(deal.id),
-  }))
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="fixed inset-0 flex flex-col" style={{ top: 64, bottom: 64 }}>
       <Navigation isAuthenticated={!!user} userName={user?.name} />
 
-      {/* Header */}
-      <div className="pt-24 pb-6 px-4 bg-gradient-to-br from-primary-50 via-white to-primary-100">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Nearby Deals</h1>
-          <p className="text-gray-600 text-lg">Discover amazing deals around your location</p>
-
-          {/* View Toggle */}
-          <div className="mt-6 inline-flex bg-white rounded-xl p-1 shadow-soft">
-            <button
-              onClick={() => setMapView('map')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                mapView === 'map'
-                  ? 'bg-primary text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Map View
+      {/* Location search bar overlay */}
+      <form
+        onSubmit={handleLocationSearch}
+        className="absolute top-4 left-4 right-4 z-[1000]"
+      >
+        <div className="bg-white rounded-2xl shadow-lg px-4 py-3 flex items-center gap-3">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+          <input
+            type="text"
+            value={searchText}
+            onChange={e => setSearchText(e.target.value)}
+            placeholder="ค้นหาสถานที่บนแผนที่..."
+            className="flex-1 text-sm text-gray-700 bg-transparent outline-none placeholder-gray-400"
+          />
+          {searching || loadingPlaces ? (
+            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          ) : (
+            <button type="submit" className="text-blue-600">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
             </button>
-            <button
-              onClick={() => setMapView('list')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
-                mapView === 'list'
-                  ? 'bg-primary text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              List View
-            </button>
-          </div>
+          )}
         </div>
-      </div>
+        {loadingPlaces && (
+          <p className="text-xs text-center text-blue-600 mt-2 bg-white/80 rounded-xl py-1">กำลังโหลดร้านค้าจริงในพื้นที่...</p>
+        )}
+      </form>
 
-      {/* Location Permission Banner */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      {/* Map */}
+      <div className="flex-1 relative">
         {userLocation ? (
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <svg className="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-            </svg>
-            <span>Showing deals near your location</span>
-            <button
-              onClick={() => {
-                if (navigator.geolocation) {
-                  navigator.geolocation.getCurrentPosition((position) => {
-                    setUserLocation({
-                      lat: position.coords.latitude,
-                      lng: position.coords.longitude,
-                    })
-                  })
-                }
-              }}
-              className="text-primary hover:text-primary-600 font-medium ml-auto"
-            >
-              Update Location
-            </button>
-          </div>
+          <MapView
+            userLocation={userLocation}
+            deals={deals}
+            onDealClick={handleDealClick}
+            flyTo={flyTo}
+          />
         ) : (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center gap-3">
-            <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span className="text-blue-800 text-sm">Enable location to see deals near you</span>
+          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+            <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" />
           </div>
         )}
       </div>
 
-      {/* Map View */}
-      {mapView === 'map' && userLocation && (
-        <div className="max-w-7xl mx-auto px-4 pb-8">
-          <div className="card overflow-hidden">
-            <MapView
-              userLocation={userLocation}
-              deals={dealsWithFavorite}
-              onDealClick={setSelectedDeal}
-              onToggleFavorite={handleToggleFavorite}
+      {/* Selected deal card */}
+      {selectedDeal && (
+        <div className="absolute bottom-4 left-4 right-4 z-[1000]">
+          <div className="bg-white rounded-2xl shadow-xl p-4 flex items-center gap-3">
+            <button
+              onClick={() => setSelectedDeal(null)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6 6 18M6 6l12 12"/>
+              </svg>
+            </button>
+            <img
+              src={selectedDeal.image || '/placeholder.jpg'}
+              alt={selectedDeal.title}
+              className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
             />
-          </div>
-
-          {/* Selected Deal Card */}
-          {selectedDeal && (
-            <div className="mt-6">
-              <DealCard
-                deal={selectedDeal}
-                onToggleFavorite={handleToggleFavorite}
-              />
-            </div>
-          )}
-
-          {/* Stats */}
-          <div className="mt-6 flex gap-4">
-            <div className="flex-1 bg-white rounded-xl p-4 shadow-soft">
-              <div className="text-2xl font-bold text-primary">{nearbyDeals.length}</div>
-              <div className="text-sm text-gray-600">Nearby Deals</div>
-            </div>
-            <div className="flex-1 bg-white rounded-xl p-4 shadow-soft">
-              <div className="text-2xl font-bold text-primary">
-                ${nearbyDeals.reduce((sum, deal) => sum + (deal.originalPrice - deal.discountedPrice), 0).toFixed(0)}
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-gray-900 text-sm truncate">{selectedDeal.storeName}</p>
+              <p className="text-gray-500 text-xs truncate">{selectedDeal.title}</p>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-blue-600 font-bold text-sm">฿{selectedDeal.discountedPrice}</span>
+                <span className="text-gray-400 line-through text-xs">฿{selectedDeal.originalPrice}</span>
+                <span className="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded-full font-medium">ลด {selectedDeal.discount}</span>
               </div>
-              <div className="text-sm text-gray-600">Potential Savings</div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* List View */}
-      {mapView === 'list' && (
-        <div className="max-w-7xl mx-auto px-4 pb-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {dealsWithFavorite.map(deal => (
-              <DealCard
-                key={deal.id}
-                deal={deal}
-                onToggleFavorite={handleToggleFavorite}
-              />
-            ))}
+            <button
+              onClick={() => router.push(`/deals/${selectedDeal.id}`)}
+              className="bg-blue-600 text-white px-3 py-2 rounded-xl text-xs font-medium flex-shrink-0"
+            >
+              ดูดีล
+            </button>
           </div>
         </div>
       )}
     </div>
   )
 }
+

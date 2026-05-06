@@ -1,14 +1,21 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import DealCard, { Deal } from '@/components/DealCard'
 
-const categories = ['All', 'Food', 'Shopping', 'Electronics', 'Fitness', 'Travel', 'Entertainment']
+const categories = [
+  { id: 'Food', label: 'อาหาร', icon: '/alpha/food.svg' },
+  { id: 'Drinks', label: 'เครื่องดื่ม', icon: '/alpha/drink.svg' },
+  { id: 'Shopping', label: 'ช้อปปิ้ง', icon: '/alpha/shopping.svg' },
+  { id: 'Entertainment', label: 'บันเทิง', icon: '/alpha/joyful.svg' },
+]
 
 export default function DealsPage() {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
+  const router = useRouter()
+  const [selectedCategory, setSelectedCategory] = useState('')
   const [deals, setDeals] = useState<Deal[]>([])
   const [favorites, setFavorites] = useState<Set<string>>(new Set())
   const [user, setUser] = useState<{ name: string; email: string } | null>(null)
@@ -64,14 +71,8 @@ export default function DealsPage() {
   }, [])
 
   const filteredDeals = deals.filter(deal => {
-    const matchesSearch =
-      deal.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      deal.storeName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      deal.category.toLowerCase().includes(searchQuery.toLowerCase())
-
-    const matchesCategory = selectedCategory === 'All' || deal.category === selectedCategory
-
-    return matchesSearch && matchesCategory
+    const matchesCategory = !selectedCategory || deal.category === selectedCategory
+    return matchesCategory
   })
 
   const handleToggleFavorite = async (dealId: string) => {
@@ -108,74 +109,76 @@ export default function DealsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin w-12 h-12 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading deals...</p>
-        </div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="animate-spin w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-20">
       <Navigation isAuthenticated={!!user} userName={user?.name} />
 
-      {/* Header Section */}
-      <div className="pt-24 pb-8 px-4 bg-gradient-to-br from-primary-50 via-white to-primary-100">
+      {/* Hero / Header */}
+      <div className="pt-20 pb-6 px-4 md:px-6 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Discover Deals</h1>
-          <p className="text-gray-600 text-lg">Find amazing discounts and save money on your favorite brands</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">ค้นหาดีล</h1>
+          <p className="text-sm text-gray-500 mb-3">รวมดีลโปรโมชันวันนี้เดียว ช่วยให้คุณค้นหา แต่ประหยัดได้มากกว่าเดิม</p>
 
-          {/* Search Bar */}
-          <div className="mt-6 relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for deals, stores, or categories..."
-              className="w-full px-6 py-4 pl-14 rounded-2xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary-20 outline-none transition-all shadow-soft text-lg"
-            />
+          {/* Location */}
+          <div className="flex items-center gap-1 mb-4">
+            <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+            </svg>
+            <span className="text-sm text-gray-700">Thammasat University</span>
+          </div>
+
+          {/* Search Bar — navigates to /search */}
+          <div className="relative max-w-xl cursor-pointer" onClick={() => router.push('/search')}>
+            <div className="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-2xl text-sm text-gray-400 select-none">
+              ค้นหา...
+            </div>
             <svg
-              className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+              fill="none" stroke="currentColor" viewBox="0 0 24 24"
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
-
-          {/* Category Filters */}
-          <div className="mt-6 flex flex-wrap gap-2">
-            {categories.map(category => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-5 py-2 rounded-full font-medium transition-all ${
-                  selectedCategory === category
-                    ? 'bg-primary text-white shadow-soft'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
-      {/* Results Count */}
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <p className="text-gray-600">
-          Showing <span className="font-semibold text-gray-900">{filteredDeals.length}</span> deals
-        </p>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-5 md:py-6">
+        {/* Category Icons */}
+        <div className="flex gap-3 md:gap-6 mb-6 md:mb-8 overflow-x-auto pb-2 pt-1 px-1 scrollbar-none -mx-1">
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setSelectedCategory(selectedCategory === cat.id ? '' : cat.id)}
+              className="flex flex-col items-center gap-1.5 group flex-shrink-0"
+            >
+              <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center transition-all shadow-sm ${
+                selectedCategory === cat.id ? 'ring-2 ring-blue-500 bg-blue-50' : 'bg-white hover:shadow-md'
+              }`}>
+                <img src={cat.icon} alt={cat.label} className="w-9 h-9 md:w-12 md:h-12 object-contain" />
+              </div>
+              <span className={`text-xs md:text-sm font-medium ${selectedCategory === cat.id ? 'text-blue-600' : 'text-gray-700'}`}>
+                {cat.label}
+              </span>
+            </button>
+          ))}
+        </div>
 
-      {/* Deals Grid */}
-      <div className="max-w-7xl mx-auto px-4 pb-16">
+        {/* Deals Near You */}
+        <h2 className="text-xl font-bold text-gray-900 mb-4">
+          ดีลใกล้คุณ
+          {filteredDeals.length > 0 && (
+            <span className="ml-2 text-sm font-normal text-gray-400">({filteredDeals.length} รายการ)</span>
+          )}
+        </h2>
+
         {filteredDeals.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
             {filteredDeals.map(deal => (
               <DealCard
                 key={deal.id}
@@ -186,9 +189,7 @@ export default function DealsPage() {
           </div>
         ) : (
           <div className="text-center py-20">
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No deals found</h3>
-            <p className="text-gray-600">Try adjusting your search or filters</p>
+            <p className="text-gray-400 text-base">ไม่พบดีลที่ค้นหา</p>
           </div>
         )}
       </div>

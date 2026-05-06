@@ -1,36 +1,71 @@
-name: Simple CI
+name: CI + CD Pipeline
 
 on:
   push:
-    branches:
-      - main              # รัน workflow ทุกครั้งที่ push ไปยัง main
+    branches: [main]
 
 jobs:
-
-  check-html:
-
-    runs-on: ubuntu-latest   # เครื่อง Ubuntu สะอาด → แก้ "Works on my machine!"
-
+  test:
+    runs-on: ubuntu-latest
     steps:
-
-      - name: Checkout repository
-        uses: actions/checkout@v4   # clone repo ลง runner
-
-      - name: ตรวจสอบว่า index.html มีอยู่จริง
+      - uses: actions/checkout@v4
+      - name: Check HTML exists
+        run: test -f index.html
+      - name: Validate HTML structure
         run: |
-          if [ ! -f index.html ]; then
-            echo "❌ ERROR: ไม่พบ index.html"
-            exit 1         # exit 1 = บอก CI ว่า step นี้ FAIL
-          fi
-          echo "✅ พบไฟล์ index.html"
+          grep -q '<html' index.html
+          grep -q '<head' index.html
+          grep -q '<body' index.html
+          echo "✅ HTML structure valid"
 
-      - name: ตรวจสอบว่ามี HTML tag
-        run: |
-          if ! grep -qi "<html" index.html; then
-            echo "❌ ERROR: ไม่พบ <html> tag"
-            exit 1
-          fi
-          echo "✅ พบ <html> tag"
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-      - name: สรุปผล CI
-        run: echo "🎉 CI ผ่านทั้งหมด — พร้อม deploy"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+
+      - name: Copy build to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: ".next,public,package.json,package-lock.json,next.config.js"
+          target: ${{ secrets.DEPLOY_PATH }}
+
+      - name: Start/Restart app with PM2 and configure Nginx
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          command_timeout: 30m
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }}
+            npm install --omit=dev --prefer-offline
+            pm2 restart alpha || pm2 start npm --name "alpha" -- start
+            pm2 save
+
+            # Setup Nginx reverse proxy for /alpha path
+            printf 'server {\n    listen 80;\n    server_name _;\n\n    location ^~ /alpha/_next/ {\n        proxy_pass http://localhost:3000;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection "upgrade";\n        proxy_set_header Host $host;\n        proxy_cache_bypass $http_upgrade;\n    }\n\n    location ~* ^/alpha/(.+\\.(svg|png|jpg|jpeg|gif|ico|webp|woff2|ttf|eot|otf))$ {\n        rewrite ^/alpha/(.+)$ /$1 break;\n        proxy_pass http://localhost:3000;\n        proxy_set_header Host $host;\n    }\n\n    location /api/ {\n        proxy_pass http://localhost:3000/alpha/api/;\n        proxy_http_version 1.1;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto $scheme;\n    }\n\n    location /alpha {\n        proxy_pass http://localhost:3000;\n        proxy_http_version 1.1;\n        proxy_set_header Upgrade $http_upgrade;\n        proxy_set_header Connection "upgrade";\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto $scheme;\n        proxy_cache_bypass $http_upgrade;\n    }\n}\n' | sudo tee /etc/nginx/sites-available/alpha > /dev/null
+            sudo ln -sf /etc/nginx/sites-available/alpha /etc/nginx/sites-enabled/alpha
+            sudo nginx -t && sudo service nginx reload
+            echo "✅ Deploy สำเร็จ"

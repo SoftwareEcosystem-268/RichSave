@@ -1,4 +1,4 @@
-import { Db } from 'mongodb'
+import { Db, ObjectId } from 'mongodb'
 
 export interface User {
   _id?: string
@@ -22,7 +22,7 @@ export class UserModel {
       createdAt: new Date(),
       updatedAt: new Date(),
     }
-    const result = await db.collection(this.collectionName).insertOne(user)
+    const result = await db.collection(this.collectionName).insertOne(user as any)
     return { ...user, _id: result.insertedId.toString() }
   }
 
@@ -31,12 +31,12 @@ export class UserModel {
   }
 
   async findById(db: Db, id: string): Promise<User | null> {
-    return await db.collection(this.collectionName).findOne({ _id: id }) as unknown as User | null
+    return await db.collection(this.collectionName).findOne({ _id: new ObjectId(id) }) as unknown as User | null
   }
 
   async update(db: Db, id: string, updates: Partial<User>): Promise<User | null> {
     await db.collection(this.collectionName).updateOne(
-      { _id: id },
+      { _id: new ObjectId(id) },
       { $set: { ...updates, updatedAt: new Date() } }
     )
     return await this.findById(db, id)
@@ -44,15 +44,15 @@ export class UserModel {
 
   async addFavorite(db: Db, userId: string, dealId: string): Promise<void> {
     await db.collection(this.collectionName).updateOne(
-      { _id: userId },
+      { _id: new ObjectId(userId) },
       { $addToSet: { favorites: dealId }, $set: { updatedAt: new Date() } }
     )
   }
 
   async removeFavorite(db: Db, userId: string, dealId: string): Promise<void> {
     await db.collection(this.collectionName).updateOne(
-      { _id: userId },
-      { $pull: { favorites: dealId }, $set: { updatedAt: new Date() } }
+      { _id: new ObjectId(userId) },
+      { $pull: { favorites: dealId } as any, $set: { updatedAt: new Date() } }
     )
   }
 

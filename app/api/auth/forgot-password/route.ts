@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { OTPModel } from '@/lib/models'
+import { sendOTPEmail } from '@/lib/email'
 
 // Generate a 6-digit OTP
 function generateOTP(): string {
@@ -22,16 +23,16 @@ export async function POST(request: NextRequest) {
     const otp = generateOTP()
     await OTPModel.create(email, otp)
 
-    // TODO: Send OTP via email
-    // For now, log it to console (remove in production)
-    console.log('OTP for', email, ':', otp)
+    // Send OTP via email
+    const emailResult = await sendOTPEmail(email, otp)
 
-    // In production, use a service like SendGrid, Nodemailer, etc.
-    // await sendEmail({
-    //   to: email,
-    //   subject: 'Password Reset Code',
-    //   text: `Your password reset code is: ${otp}`,
-    // })
+    if (!emailResult.success) {
+      console.error('Failed to send email:', emailResult.error)
+      return NextResponse.json(
+        { error: 'Failed to send OTP email' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
