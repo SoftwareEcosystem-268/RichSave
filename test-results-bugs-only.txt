@@ -1,0 +1,330 @@
+
+Running 31 tests using 1 worker
+
+  ✓   1 [chromium] › tests\auth\login.spec.js:42:3 › Login - Functional Tests › AUTH-LOG-001: Login with valid credentials (6.5s)
+  ✓   2 [chromium] › tests\auth\login.spec.js:53:3 › Login - Functional Tests › AUTH-LOG-002: Remember me functionality (4.9s)
+  ✘   3 [chromium] › tests\auth\login.spec.js:68:3 › Login - Functional Tests › AUTH-LOG-003: Show/Hide password toggle (7.3s)
+  ✘   4 [chromium] › tests\auth\login.spec.js:89:3 › Login - Functional Tests › AUTH-LOG-004: Redirect to deals after successful login (7.5s)
+  ✓   5 [chromium] › tests\auth\login.spec.js:107:3 › Login - Negative Tests › AUTH-LOG-101: Login with unregistered email (2.1s)
+  ✘   6 [chromium] › tests\auth\login.spec.js:118:3 › Login - Negative Tests › AUTH-LOG-102: Login with valid email, wrong password (2.4s)
+  ✓   7 [chromium] › tests\auth\login.spec.js:131:3 › Login - Negative Tests › AUTH-LOG-103: Login with empty email field (2.0s)
+  ✓   8 [chromium] › tests\auth\login.spec.js:141:3 › Login - Negative Tests › AUTH-LOG-104: Login with empty password field (2.0s)
+  ✓   9 [chromium] › tests\auth\login.spec.js:151:3 › Login - Negative Tests › AUTH-LOG-105: Login with both fields empty (2.2s)
+  ✘  10 [chromium] › tests\auth\login.spec.js:161:3 › Login - Negative Tests › AUTH-LOG-106: Login with invalid email format (7.0s)
+  -  11 [chromium] › tests\auth\login.spec.js:171:3 › Login - Negative Tests › AUTH-LOG-107: Login with unactivated account
+  ✘  12 [chromium] › tests\auth\login.spec.js:193:3 › Login - Edge Cases › AUTH-LOG-201: Login with email in different case (7.2s)
+  ✓  13 [chromium] › tests\auth\login.spec.js:205:3 › Login - Edge Cases › AUTH-LOG-202: Login with email leading/trailing spaces (3.5s)
+  ✓  14 [chromium] › tests\auth\login.spec.js:217:3 › Login - Edge Cases › AUTH-LOG-203: Login during network offline (2.4s)
+  ✓  15 [chromium] › tests\auth\login.spec.js:236:3 › Login - Edge Cases › AUTH-LOG-204: Login with slow network response (7.8s)
+  ✘  16 [chromium] › tests\auth\login.spec.js:258:3 › Login - Edge Cases › AUTH-LOG-205: Login tab away and back (1.0m)
+  ✘  17 [chromium] › tests\auth\login.spec.js:282:3 › Login - Rate Limiting Tests › AUTH-LOG-301: Account locked after 5 failed attempts (10.4s)
+  ✘  18 [chromium] › tests\auth\login.spec.js:305:3 › Login - Rate Limiting Tests › AUTH-LOG-302: Rate limit resets after timeout (11.9s)
+  ✓  19 [chromium] › tests\auth\login.spec.js:328:3 › Login - Rate Limiting Tests › AUTH-LOG-303: Successful login resets counter (8.7s)
+  ✘  20 [chromium] › tests\auth\login.spec.js:352:3 › Login - Security Tests › AUTH-SEC-001: SQL Injection in email field (7.8s)
+  ✘  21 [chromium] › tests\auth\login.spec.js:365:3 › Login - Security Tests › AUTH-SEC-002: XSS in email field (8.3s)
+  ✓  22 [chromium] › tests\auth\login.spec.js:378:3 › Login - Security Tests › AUTH-SEC-003: NoSQL Injection in password field (2.5s)
+  ✓  23 [chromium] › tests\auth\login.spec.js:390:3 › Login - Security Tests › AUTH-SEC-004: Token stored in httpOnly cookie (2.7s)
+  ✓  24 [chromium] › tests\auth\login.spec.js:418:3 › Login - Security Tests › AUTH-SEC-005: Timing attack prevention (2.9s)
+  ✓  25 [chromium] › tests\auth\login.spec.js:446:3 › Login - UI/UX Tests › AUTH-UI-LOG-001: Forgot password link visible and accessible (3.4s)
+  ✓  26 [chromium] › tests\auth\login.spec.js:460:3 › Login - UI/UX Tests › AUTH-UI-LOG-002: Sign up link for new users (3.0s)
+  ✓  27 [chromium] › tests\auth\login.spec.js:474:3 › Login - UI/UX Tests › AUTH-UI-LOG-003: Submit button loading state (3.5s)
+  ✓  28 [chromium] › tests\auth\login.spec.js:490:3 › Login - UI/UX Tests › AUTH-UI-LOG-004: Error messages are user-friendly (3.4s)
+  ✓  29 [chromium] › tests\auth\login.spec.js:508:3 › Login - UI/UX Tests › AUTH-UI-LOG-005: Mobile responsive design (1.5s)
+  ✓  30 [chromium] › tests\auth\login.spec.js:524:3 › Login - UI/UX Tests › AUTH-UI-LOG-006: Keyboard navigation works (3.0s)
+  ✓  31 [chromium] › tests\auth\login.spec.js:545:3 › Login - UI/UX Tests › AUTH-UI-LOG-007: Back to Home link (3.4s)
+
+
+  1) [chromium] › tests\auth\login.spec.js:68:3 › Login - Functional Tests › AUTH-LOG-003: Show/Hide password toggle 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('input[type="text"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('input[type="text"]')[22m
+
+
+      81 |       // Assert - password should become visible (type="text")
+      82 |       const visiblePassword = page.locator('input[type="text"]');
+    > 83 |       await expect(visiblePassword).toBeVisible();
+         |                                     ^
+      84 |     } else {
+      85 |       test.skip(true, 'Show/hide password toggle not implemented');
+      86 |     }
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:83:37
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Functio-f1665-3-Show-Hide-password-toggle-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Functio-f1665-3-Show-Hide-password-toggle-chromium\error-context.md
+
+  2) [chromium] › tests\auth\login.spec.js:89:3 › Login - Functional Tests › AUTH-LOG-004: Redirect to deals after successful login 
+
+    Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Expected pattern: [32m/\/deals/[39m
+    Received string:  [31m"http://localhost:3000/login"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m    9 × unexpected value "http://localhost:3000/login"[22m
+
+
+      94 |
+      95 |     // Assert
+    > 96 |     await expect(page).toHaveURL(/\/deals/, { timeout: 5000 });
+         |                        ^
+      97 |   });
+      98 | });
+      99 |
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:96:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Functio-5e3d6-eals-after-successful-login-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Functio-5e3d6-eals-after-successful-login-chromium\error-context.md
+
+  3) [chromium] › tests\auth\login.spec.js:118:3 › Login - Negative Tests › AUTH-LOG-102: Login with valid email, wrong password 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).not.[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=/email/i')
+    Expected: not visible
+    Error: strict mode violation: locator('text=/email/i') resolved to 2 elements:
+        1) <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">Invalid email or password</div> aka getByText('Invalid email or password')
+        2) <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label> aka getByText('Email Address')
+
+    Call log:
+    [2m  - Expect "not toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=/email/i')[22m
+
+
+      126 |
+      127 |     // Should not reveal which field is wrong
+    > 128 |     await expect(page.locator('text=/email/i')).not.toBeVisible();
+          |                                                     ^
+      129 |   });
+      130 |
+      131 |   test('AUTH-LOG-103: Login with empty email field', async ({ page }) => {
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:128:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Negativ-909d8--valid-email-wrong-password-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Negativ-909d8--valid-email-wrong-password-chromium\error-context.md
+
+  4) [chromium] › tests\auth\login.spec.js:161:3 › Login - Negative Tests › AUTH-LOG-106: Login with invalid email format 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=/valid email/i')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=/valid email/i')[22m
+
+
+      166 |
+      167 |     // Assert
+    > 168 |     await expect(page.locator('text=/valid email/i')).toBeVisible();
+          |                                                       ^
+      169 |   });
+      170 |
+      171 |   test('AUTH-LOG-107: Login with unactivated account', async ({ page }) => {
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:168:55
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Negativ-613bb-n-with-invalid-email-format-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Negativ-613bb-n-with-invalid-email-format-chromium\error-context.md
+
+  5) [chromium] › tests\auth\login.spec.js:193:3 › Login - Edge Cases › AUTH-LOG-201: Login with email in different case 
+
+    Error: [2mexpect([22m[31mpage[39m[2m).[22mtoHaveURL[2m([22m[32mexpected[39m[2m)[22m failed
+
+    Expected pattern: [32m/\/deals/[39m
+    Received string:  [31m"http://localhost:3000/login"[39m
+    Timeout: 5000ms
+
+    Call log:
+    [2m  - Expect "toHaveURL" with timeout 5000ms[22m
+    [2m    9 × unexpected value "http://localhost:3000/login"[22m
+
+
+      200 |
+      201 |     // Assert - case-insensitive comparison
+    > 202 |     await expect(page).toHaveURL(/\/deals/, { timeout: 5000 });
+          |                        ^
+      203 |   });
+      204 |
+      205 |   test('AUTH-LOG-202: Login with email leading/trailing spaces', async ({ page }) => {
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:202:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Edge-Ca-db1fc-ith-email-in-different-case-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Edge-Ca-db1fc-ith-email-in-different-case-chromium\error-context.md
+
+  6) [chromium] › tests\auth\login.spec.js:258:3 › Login - Edge Cases › AUTH-LOG-205: Login tab away and back 
+
+    [31mTest timeout of 60000ms exceeded.[39m
+
+    Error: page.evaluate: Test timeout of 60000ms exceeded.
+
+      264 |
+      265 |     // Act - simulate tab away (wait 1 minute)
+    > 266 |     await page.evaluate(() => {
+          |                ^
+      267 |       return new Promise(resolve => setTimeout(resolve, 60000));
+      268 |     });
+      269 |
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:266:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Edge-Ca-05d91-205-Login-tab-away-and-back-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Edge-Ca-05d91-205-Login-tab-away-and-back-chromium\error-context.md
+
+  7) [chromium] › tests\auth\login.spec.js:282:3 › Login - Rate Limiting Tests › AUTH-LOG-301: Account locked after 5 failed attempts 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=/too many|locked|try again later/i')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=/too many|locked|try again later/i')[22m
+
+
+      292 |
+      293 |     // Assert - should show rate limit error
+    > 294 |     await expect(page.locator('text=/too many|locked|try again later/i')).toBeVisible();
+          |                                                                           ^
+      295 |
+      296 |     // Try with correct password - should still be blocked
+      297 |     await page.fill('input[type="email"]', testUsers.valid.email);
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:294:75
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Rate-Li-30333-ked-after-5-failed-attempts-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Rate-Li-30333-ked-after-5-failed-attempts-chromium\error-context.md
+
+  8) [chromium] › tests\auth\login.spec.js:305:3 › Login - Rate Limiting Tests › AUTH-LOG-302: Rate limit resets after timeout 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=/too many/i')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=/too many/i')[22m
+
+
+      322 |     } else {
+      323 |       // At minimum, should show rate limit message
+    > 324 |       await expect(page.locator('text=/too many/i')).toBeVisible();
+          |                                                      ^
+      325 |     }
+      326 |   });
+      327 |
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:324:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Rate-Li-1e983--limit-resets-after-timeout-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Rate-Li-1e983--limit-resets-after-timeout-chromium\error-context.md
+
+  9) [chromium] › tests\auth\login.spec.js:352:3 › Login - Security Tests › AUTH-SEC-001: SQL Injection in email field 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=/invalid|error/i')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=/invalid|error/i')[22m
+
+
+      360 |     // Assert - should not bypass authentication
+      361 |     await expect(page).toHaveURL(/\/login/);
+    > 362 |     await expect(page.locator('text=/invalid|error/i')).toBeVisible();
+          |                                                         ^
+      363 |   });
+      364 |
+      365 |   test('AUTH-SEC-002: XSS in email field', async ({ page }) => {
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:362:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Securit-1a112-QL-Injection-in-email-field-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Securit-1a112-QL-Injection-in-email-field-chromium\error-context.md
+
+  10) [chromium] › tests\auth\login.spec.js:365:3 › Login - Security Tests › AUTH-SEC-002: XSS in email field 
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('text=/invalid|error/i')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('text=/invalid|error/i')[22m
+
+
+      373 |     // Assert - no alert should execute
+      374 |     await expect(page).toHaveURL(/\/login/);
+    > 375 |     await expect(page.locator('text=/invalid|error/i')).toBeVisible();
+          |                                                         ^
+      376 |   });
+      377 |
+      378 |   test('AUTH-SEC-003: NoSQL Injection in password field', async ({ page }) => {
+        at C:\Users\ASUS\Desktop\Work\alpha\tests\auth\login.spec.js:375:57
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\auth-login-Login---Securit-833ea--SEC-002-XSS-in-email-field-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\auth-login-Login---Securit-833ea--SEC-002-XSS-in-email-field-chromium\error-context.md
+
+  10 failed
+    [chromium] › tests\auth\login.spec.js:68:3 › Login - Functional Tests › AUTH-LOG-003: Show/Hide password toggle 
+    [chromium] › tests\auth\login.spec.js:89:3 › Login - Functional Tests › AUTH-LOG-004: Redirect to deals after successful login 
+    [chromium] › tests\auth\login.spec.js:118:3 › Login - Negative Tests › AUTH-LOG-102: Login with valid email, wrong password 
+    [chromium] › tests\auth\login.spec.js:161:3 › Login - Negative Tests › AUTH-LOG-106: Login with invalid email format 
+    [chromium] › tests\auth\login.spec.js:193:3 › Login - Edge Cases › AUTH-LOG-201: Login with email in different case 
+    [chromium] › tests\auth\login.spec.js:258:3 › Login - Edge Cases › AUTH-LOG-205: Login tab away and back 
+    [chromium] › tests\auth\login.spec.js:282:3 › Login - Rate Limiting Tests › AUTH-LOG-301: Account locked after 5 failed attempts 
+    [chromium] › tests\auth\login.spec.js:305:3 › Login - Rate Limiting Tests › AUTH-LOG-302: Rate limit resets after timeout 
+    [chromium] › tests\auth\login.spec.js:352:3 › Login - Security Tests › AUTH-SEC-001: SQL Injection in email field 
+    [chromium] › tests\auth\login.spec.js:365:3 › Login - Security Tests › AUTH-SEC-002: XSS in email field 
+  1 skipped
+  20 passed (6.2m)
