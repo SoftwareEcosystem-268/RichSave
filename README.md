@@ -1,19 +1,48 @@
-# RichSave - Smart Savings & Deal Discovery Platform
+# RichSave — แพลตฟอร์มค้นหาดีลและติดตามการประหยัด
 
-A modern full-stack web application for discovering deals, tracking savings, and managing your budget. Built with Next.js, MongoDB, and Tailwind CSS.
+แอปพลิเคชันเว็บสำหรับค้นหาโปรโมชัน ติดตามการประหยัด และบริหารงบประมาณ สร้างด้วย Next.js, MongoDB และ Tailwind CSS
 
 ![RichSave](https://img.shields.io/badge/Next.js-14.2-black) ![MongoDB](https://img.shields.io/badge/MongoDB-6.3-green) ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8)
 
-## Features
+> **"ใช้เท่าเดิม แต่คุ้มกว่าเดิม"**
+> 
+> **Production:** http://labs89.hpc-ignite.org/alpha
 
-- 🔐 **JWT Authentication** - Secure login, signup, and password reset flow
-- 🔍 **Deal Search** - Search and filter deals by category, store, or keywords
-- 📍 **Location-Based Deals** - Find deals near you with interactive map
-- ❤️ **Save Favorites** - Bookmark deals for quick access
-- 📊 **Savings Tracker** - Visualize your savings with charts and analytics
-- 👤 **Profile Management** - Edit your profile and preferences
-- 📱 **Responsive Design** - Mobile-first, works on all devices
-- 🎨 **Modern UI** - Clean fintech-inspired design
+---
+
+## ฟีเจอร์หลัก
+
+- 🔐 **JWT Authentication** — ระบบ login, signup และ reset password
+- 🔍 **Deal Search** — ค้นหาโปรโมชันตามหมวดหมู่, ร้านค้า หรือคำค้นหา
+- 📍 **Location-Based Deals** — แสดงดีลใกล้ตัวพร้อมแผนที่
+- ❤️ **Save Favorites** — บันทึกดีลที่สนใจไว้ดูภายหลัง
+- 📊 **Savings Tracker** — ติดตามยอดเงินที่ประหยัดได้พร้อมกราฟ
+- 👤 **Profile Management** — แก้ไขโปรไฟล์และการตั้งค่า
+- 📱 **Responsive Design** — รองรับทุกขนาดหน้าจอ
+
+---
+
+## Vision & Goals
+
+### ปัญหาที่แก้ไข
+คนไทยส่วนใหญ่ขาดนิสัยบริหารการเงินส่วนตัว เพราะแอปติดตามค่าใช้จ่ายทั่วไปต้องบันทึกข้อมูลเองทุกอย่าง และไม่ได้ช่วยให้ตัดสินใจใช้เงินได้ดีขึ้นในชีวิตจริง
+
+### วิธีแก้ปัญหา
+RichSave เชื่อมการติดตามค่าใช้จ่ายเข้ากับการแนะนำดีลอาหารใกล้ตัวแบบ real-time ทำให้ผู้ใช้เริ่มประหยัดเงินได้ตั้งแต่มื้อแรก โดยไม่ต้องวางแผนการเงินล่วงหน้า
+
+### กลุ่มเป้าหมาย
+- หลัก: Gen Z อายุ 16–27 ปี
+- รอง: Late Gen Alpha อายุ 12–15 ปี และผู้ปกครอง
+
+### Success Metrics
+| Metric | Target | Current |
+|---|---|---|
+| Monthly Active Users | 1,000 users ใน 3 เดือน | — |
+| Day-30 Retention Rate | ≥ 40% | — |
+| Deals used per user / month | ≥ 5 ครั้ง | — |
+| Average savings per user / month | ≥ 300 บาท | — |
+
+---
 
 ## Tech Stack
 
@@ -21,59 +50,104 @@ A modern full-stack web application for discovering deals, tracking savings, and
 - **Backend**: Next.js API Routes, Node.js
 - **Database**: MongoDB
 - **Authentication**: JWT (JSON Web Tokens)
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS, shadcn/ui
 - **Charts**: Recharts
 - **Maps**: Leaflet (OpenStreetMap)
-- **QR Codes**: qrcode library
+- **Testing**: Jest, Playwright
+- **CI/CD**: GitHub Actions, CodeQL security scan
 
-## Vision & Goals
+---
 
-**Problem Statement**
+## Sprint History
 
-Most Thai people lack personal finance management habits because typical expense-tracking apps require a high level of self-discipline to log data manually — and they don't actually help users make better spending decisions in real life. As a result, many students have no idea where their money went and struggle to save, even when they intend to.
+### Sprint 1 — Foundation
+**ช่วงเวลา:** 10–23 มีนาคม 2569
 
-**Solution**
+| แผน | ผลจริง | สถานะ |
+|---|---|---|
+| วาง use case และ user flow ทั้งหมด | PM นำ use case มา UX/UI แตก user flow และ wireframe ได้ครบ | ✅ |
+| ตั้งค่า repo + CI/CD + CodeQL | DevOps ตั้งค่าครบ เป็นทีมเดียวใน class ที่เปิด CodeQL security scan | ✅ |
+| ระบบ Authentication พื้นฐาน | Dev สร้างระบบ login/signup/reset password เสร็จ | ✅ |
+| เขียน Test Cases ชุดแรก | QA เขียน test cases พร้อมใช้งาน | ✅ |
 
-RichSave bridges expense tracking with real-time nearby food deal recommendations, enabling users to save money starting from their very first meal — no need to "plan finances" first. Unlike conventional budgeting apps that only record money already spent, RichSave helps users make smarter decisions before they spend.
+**Retrospective:**
+- ✅ สิ่งที่ทำได้ดี: การประชุม Sprint Planning ทำให้ทีมเห็นภาพรวมชัด UX/UI และ Dev เริ่มงานได้ทันทีโดยไม่ต้องรอกัน
+- ⚠️ สิ่งที่ต้องปรับปรุง: SM ยังไม่คุ้นกับบทบาทตัวเอง ไม่ได้บันทึกผลการประชุมไว้เป็นเอกสาร
+- 📌 Action items: ใช้ MS Teams ติดตาม standup async ทุกวัน
 
-**Target Users**
+---
 
-Primary: Gen Z (ages 16–27)
-Secondary: Late Gen Alpha (ages 12–15) and their parents
+### Sprint 2 — Core Features
+**ช่วงเวลา:** 24 มีนาคม – 13 เมษายน 2569
 
-**Success Metrics**
-| Metric | Target | Current |
-|------|------|------|
-| Monthly active users | 1,000 users within 3 months | — |
-| Day-30 retention rate | ≥ 40% | — |
-| Deals used per user / month | ≥ 5 times | — |
-| Average money saved per user / month | ≥ 300 THB | — |
+| แผน | ผลจริง | สถานะ |
+|---|---|---|
+| Deal Search | Dev พัฒนาและ QA ทดสอบเสร็จ | ✅ |
+| Location-based Deals | Dev พัฒนาและ QA ทดสอบเสร็จ | ✅ |
+| Save Favorites | Dev พัฒนาและ QA ทดสอบเสร็จ | ✅ |
+| Deploy ขึ้น Staging | DevOps deploy สำเร็จ | ✅ |
 
-## Roadmap
+**Retrospective:**
+- ✅ สิ่งที่ทำได้ดี: ส่งมอบครบ 3 features ตาม goal โดยไม่มีงานค้างข้าม Sprint PM และ SM ติดตามงานร่วมกันทุกสัปดาห์ทำให้เห็น blocker ได้ทันที
+- ⚠️ สิ่งที่ต้องปรับปรุง: Commit กระจุกที่ Dev คนเดียว งานของ QA และ UX/UI ไม่ปรากฏใน commit log ไม่มีการบันทึก Sprint Review เป็นเอกสาร
+- 📌 Action items: Sprint 3 ทุกคนที่มีงาน docs หรือ config ควร push เข้า repo โดยตรง
 
-| Task | Team | Status |
-|----|----|------|
-| Design Dashboard UI | Design | 🟢 Done |
-| Authentication system (register / login) | Backend | 🟢 Done |
-| API for fetching nearby food deals | Backend | 🟢 Done |
-| Deal listing page with filters | Frontend | 🟢 Done |
-| Favorites / saved deals system | Frontend | 🟢 Done |
-| GPS / Location permission integration | Frontend | 🟢 Done |
+---
 
+### Sprint 3 — Polish & Release
+**ช่วงเวลา:** 14 เมษายน – 11 พฤษภาคม 2569
 
-## Prerequisites
+| แผน | ผลจริง | สถานะ |
+|---|---|---|
+| Savings Tracker | Dev พัฒนาเสร็จ QA ทดสอบแล้ว | ✅ |
+| Production Deploy | DevOps deploy สำเร็จที่ labs89.hpc-ignite.org/alpha | ✅ |
+| Subscription System | ทำไม่ทันภายใน Sprint — เลื่อนเป็น future feature | ❌ |
+| AI Chatbot | ตัดสินใจไม่ทำ เพราะซับซ้อนเกินขอบเขต MVP | ❌ |
 
-- Node.js 18+ and npm
-- MongoDB (local or MongoDB Atlas)
-- Git
+**Retrospective:**
+- ✅ สิ่งที่ทำได้ดี: Production deploy สำเร็จ CI/CD ผ่านสะอาดทุก run ตลอดทั้งโครงการ ทีมรับมือกับ UX/UI ที่ส่งงานล่าช้าได้โดยปรับ internal deadline แทนการรอข้าม Sprint
+- ⚠️ สิ่งที่ต้องปรับปรุง: Documentation ควรทำควบคู่กับการพัฒนาตลอด ไม่ใช่ทำทั้งหมดใน Sprint สุดท้าย
+- 📌 Action items: Push final docs ลง /docs/ ก่อน 15 พค.
+
+---
+
+## Known Gaps
+
+- **Subscription System** — ทำไม่ทันใน Sprint 3 เก็บไว้เป็น future feature
+- **AI Chatbot** — ตัดออกจาก MVP เพราะซับซ้อนเกินขอบเขต
+- **Sprint Review docs** — ไม่ได้บันทึกระหว่างโครงการ เพิ่มย้อนหลังใน Sprint 3
+- **Commit distribution** — งานของ QA, UX/UI และ SM ส่วนใหญ่ไม่ปรากฏใน commit log เพราะทำงานนอก GitHub
+
+---
+
+## ทีม
+
+| ชื่อ | บทบาท | GitHub | ความรับผิดชอบ |
+|---|---|---|---|
+| Podsatorn Sudkong | Product Manager | @podsatornSudsud | วางแผนผลิตภัณฑ์, ดูแล backlog, นำ Sprint Review |
+| Thanat Vijitrakanlikit | Scrum Master | @Thanatvij | จัด Sprint Planning, ดูแล standup, นำ Retrospective, ติดตามงานทีม |
+| Nattanon Keeratiwattapong | Developer | @MuuDeng | พัฒนา frontend และ backend, เชื่อมต่อ API และฐานข้อมูล |
+| Attakorn Phothong | QA Engineer | @NewmoodLev | เขียนและรัน test cases, ตรวจสอบคุณภาพทุก feature |
+| Suchanya Pengprai | DevOps Engineer | @suchanya-pen | ตั้งค่า CI/CD, CodeQL, deploy บน EC2 + Nginx |
+| Chayanisa Kongneing | UX/UI Designer | @chayanisa19 | ออกแบบ user flow, wireframe และ UI ทั้งหมดใน Figma |
+
+---
+
+## การสื่อสารในทีม
+
+- **ประชุม**: onsite ทุกสัปดาห์ ห้อง 7315 — online เมื่อมีสมาชิกไม่สะดวก
+- **Standup**: async ทุกวันผ่าน MS Teams
+- **Code Review**: Dev เปิด PR → DevOps และ QA review ก่อน merge เข้า main
+
+---
 
 ## Quick Start
 
-### 1. Clone the Repository
+### 1. Clone Repository
 
 ```bash
-git clone <your-repo-url>
-cd Rich-Save
+git clone https://github.com/SoftwareEcosystem-268/alpha.git
+cd alpha
 ```
 
 ### 2. Install Dependencies
@@ -82,244 +156,120 @@ cd Rich-Save
 npm install
 ```
 
-### 3. Set Up Environment Variables
-
-Copy `.env.example` to `.env.local`:
+### 3. ตั้งค่า Environment Variables
 
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` and add your configuration:
+แก้ไข `.env.local`:
 
 ```env
-# MongoDB Connection (REQUIRED)
+# MongoDB (จำเป็น)
 MONGODB_URI=mongodb://localhost:27017/richsave
-# For MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/richsave?retryWrites=true&w=majority
 
-# JWT Secret (REQUIRED - generate a secure random string)
+# JWT Secret (จำเป็น)
 JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
 
-# App Configuration
+# App URL
 NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-# Optional: For enhanced map features
-# NEXT_PUBLIC_MAPBOX_TOKEN=your-mapbox-token
 ```
 
-### 4. Start MongoDB
-
-**For local MongoDB:**
-```bash
-# macOS (using Homebrew)
-brew services start mongodb-community
-
-# Linux
-sudo systemctl start mongodb
-
-# Windows
-# MongoDB should start automatically as a service
-```
-
-**For MongoDB Atlas:**
-1. Create a free account at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
-2. Create a new cluster
-3. Add your IP to the whitelist (0.0.0.0/0 for development)
-4. Create a database user
-5. Copy the connection string to your `.env.local`
-
-### 5. Seed the Database (Optional)
-
-To populate the database with sample deals:
-
-```bash
-npm run seed
-```
-
-This will create sample deals in your MongoDB database.
-
-### 6. Run the Development Server
+### 4. รัน Development Server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+เปิด [http://localhost:3000](http://localhost:3000) ในเบราว์เซอร์
 
-## Project Structure
+---
+
+## โครงสร้างโปรเจกต์
 
 ```
-Rich-Save/
-├── app/                      # Next.js App Router
-│   ├── api/                  # API Routes
-│   │   ├── auth/            # Authentication endpoints
-│   │   ├── deals/           # Deal CRUD operations
-│   │   └── user/            # User profile & settings
-│   ├── deals/               # Deal pages
-│   ├── favorites/           # Favorites page
-│   ├── login/               # Login page
-│   ├── nearby/              # Nearby deals with map
-│   ├── profile/             # User profile
-│   ├── savings/             # Savings tracker
-│   ├── signup/              # Signup page
-│   ├── forgot-password/     # Password reset flow
-│   ├── privacy/             # Privacy policy page
-│   ├── globals.css          # Global styles
-│   ├── layout.tsx           # Root layout
-│   └── page.tsx             # Home page
-├── components/              # Reusable components
-│   ├── Navigation.tsx       # Main navigation
-│   ├── DealCard.tsx         # Deal card component
-│   └── MapView.tsx          # Interactive map
-├── lib/                     # Utility libraries
-│   ├── db.ts               # MongoDB connection
-│   ├── models.ts           # Database models
-│   └── auth.ts             # JWT utilities
-├── middleware.ts            # Auth middleware
-├── tailwind.config.ts       # Tailwind configuration
-├── next.config.js           # Next.js configuration
-└── package.json             # Dependencies
+alpha/
+├── app/
+│   ├── api/
+│   │   ├── auth/        # Authentication endpoints
+│   │   ├── deals/       # Deal CRUD
+│   │   └── user/        # User profile & settings
+│   ├── deals/
+│   ├── favorites/
+│   ├── nearby/
+│   ├── savings/
+│   └── ...
+├── components/
+├── lib/
+├── tests/
+├── docs/
+│   ├── cicd.md
+│   ├── deployment.md
+│   ├── environment.md
+│   ├── final-retrospective.md
+│   └── sprint-review.md
+└── package.json
 ```
+
+---
 
 ## API Endpoints
 
 ### Authentication
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/signup` | Create a new account |
-| POST | `/api/auth/login` | Login to existing account |
-| POST | `/api/auth/logout` | Logout user |
-| POST | `/api/auth/forgot-password` | Request password reset |
-| POST | `/api/auth/verify-otp` | Verify OTP code |
-| POST | `/api/auth/reset-password` | Reset password |
+| Method | Endpoint | คำอธิบาย |
+|---|---|---|
+| POST | `/api/auth/signup` | สมัครสมาชิก |
+| POST | `/api/auth/login` | เข้าสู่ระบบ |
+| POST | `/api/auth/logout` | ออกจากระบบ |
+| POST | `/api/auth/forgot-password` | ขอ reset password |
+| POST | `/api/auth/verify-otp` | ยืนยัน OTP |
+| POST | `/api/auth/reset-password` | ตั้ง password ใหม่ |
 
 ### Deals
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/deals` | Get all deals (supports search & filters) |
-| GET | `/api/deals/[id]` | Get single deal details |
-| POST | `/api/deals/[id]/redeem` | Redeem a deal |
-| POST | `/api/deals` | Create new deal (admin) |
+| Method | Endpoint | คำอธิบาย |
+|---|---|---|
+| GET | `/api/deals` | ดึงดีลทั้งหมด (รองรับ search และ filter) |
+| GET | `/api/deals/[id]` | ดึงรายละเอียดดีล |
+| POST | `/api/deals/[id]/redeem` | ใช้ดีล |
 
 ### User
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/user/profile` | Get user profile |
-| PUT | `/api/user/profile` | Update user profile |
-| GET | `/api/user/favorites` | Get favorite deals |
-| POST | `/api/user/favorites` | Add to favorites |
-| DELETE | `/api/user/favorites` | Remove from favorites |
-| GET | `/api/user/savings` | Get savings data |
-| POST | `/api/user/change-password` | Change password |
-
-## Database Schema
-
-### Users Collection
-```javascript
-{
-  _id: ObjectId,
-  name: String,
-  email: String (unique),
-  password: String (hashed),
-  phone: String,
-  location: String,
-  favorites: [String],
-  preferences: {
-    pushNotifications: Boolean,
-    locationServices: Boolean,
-    darkMode: Boolean
-  },
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Deals Collection
-```javascript
-{
-  _id: ObjectId,
-  title: String,
-  description: String,
-  discount: String,
-  originalPrice: Number,
-  discountedPrice: Number,
-  storeName: String,
-  image: String,
-  category: String,
-  location: {
-    lat: Number,
-    lng: Number,
-    address: String
-  },
-  expiresAt: Date,
-  terms: [String],
-  isActive: Boolean,
-  createdAt: Date,
-  updatedAt: Date
-}
-```
-
-### Redemptions Collection
-```javascript
-{
-  _id: ObjectId,
-  userId: ObjectId,
-  dealId: String,
-  dealTitle: String,
-  storeName: String,
-  savings: Number,
-  redeemedAt: Date
-}
-```
-
-## Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run seed` | Seed database with sample data |
-
-## Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `MONGODB_URI` | Yes | MongoDB connection string |
-| `JWT_SECRET` | Yes | Secret key for JWT tokens |
-| `NEXT_PUBLIC_APP_URL` | No | Application URL (default: localhost:3000) |
-| `NEXT_PUBLIC_MAPBOX_TOKEN` | No | Mapbox token for enhanced maps |
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import project in [Vercel](https://vercel.com)
-3. Add environment variables in Vercel dashboard
-4. Deploy!
-
-### Other Platforms
-
-Make sure to set the `MONGODB_URI` and `JWT_SECRET` environment variables.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is open source and available under the MIT License.
-
-## Support
-
-For support, email support@richsave.com or open an issue in the repository.
+| Method | Endpoint | คำอธิบาย |
+|---|---|---|
+| GET | `/api/user/profile` | ดึงข้อมูลโปรไฟล์ |
+| PUT | `/api/user/profile` | อัปเดตโปรไฟล์ |
+| GET | `/api/user/favorites` | ดึงดีลที่บันทึกไว้ |
+| POST | `/api/user/favorites` | เพิ่มดีลในรายการโปรด |
+| DELETE | `/api/user/favorites` | ลบดีลจากรายการโปรด |
+| GET | `/api/user/savings` | ดึงข้อมูลการประหยัด |
 
 ---
 
-**Built with ❤️ by the RichSave team**
+## Available Scripts
+
+| Command | คำอธิบาย |
+|---|---|
+| `npm run dev` | รัน development server |
+| `npm run build` | Build สำหรับ production |
+| `npm start` | รัน production server |
+| `npm run lint` | ตรวจสอบ code style |
+| `npm run seed` | เพิ่มข้อมูลตัวอย่างใน database |
+
+---
+
+## เอกสารเพิ่มเติม
+
+- [CI/CD Guide](docs/cicd.md)
+- [Deployment Guide](docs/deployment.md)
+- [Environment Variables](docs/environment.md)
+- [Final Retrospective](docs/final-retrospective.md)
+- [Sprint Review Summary](docs/sprint-review.md)
+
+---
+
+## License
+
+MIT License
+
+---
+
+**Built with ❤️ by Squad Alpha — EightNine Labs | DTI 241**
