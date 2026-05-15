@@ -263,6 +263,69 @@ alpha/
 - [Environment Variables](docs/environment.md)
 - [Final Retrospective](docs/final-retrospective.md)
 - [Sprint Review Summary](docs/sprint-review.md)
+## Testing
+
+โปรเจกต์ใช้การทดสอบ 2 ระดับ: **Unit/Integration** ด้วย Jest และ **E2E** ด้วย Playwright
+
+```bash
+# Unit tests
+npm run test               # รัน Jest ทั้งหมด
+npm run test:coverage      # รันพร้อมรายงาน coverage (threshold 70%)
+
+# E2E tests (Playwright)
+npm run test:e2e           # รันทั้งหมด
+npm run test:e2e:auth      # รันเฉพาะ auth (login, register, forgot)
+npm run report:show        # เปิด HTML report
+```
+
+**Test structure:**
+```
+tests/
+├── auth/          # E2E: login, register, forgot password
+├── deal/          # E2E: search, filter, detail
+├── favorites/     # E2E: favorites & notification
+├── location/      # E2E: map & location permission
+├── savings/       # E2E: savings & history
+└── *.unit.test.ts # Jest unit tests
+```
+
+ดูรายละเอียดเพิ่มเติมที่ [TESTING.md](TESTING.md)
+
+---
+
+## Known Issues
+
+รายการ bug / limitation ที่ทีมทราบแล้ว (อัปเดต 2026-05-07):
+
+| # | Issue | Severity | Status |
+|---|-------|----------|--------|
+| 1 | Show/Hide password toggle ยังไม่ implement | 🟡 Medium | Open |
+| 2 | Login บางครั้งไม่ redirect ไป `/deals` | 🔴 High | Open |
+| 3 | Rate limiting / account lock ยังไม่ทำงาน | 🔴 High | Open |
+| 4 | Admin check ไม่มีบน `POST /api/deals` | 🔴 High | Open |
+| 5 | Notification feature ยังไม่ implement | 🟢 Low | In Progress |
+| 6 | Location search ยังไม่ implement | 🟢 Low | In Progress |
+| 7 | Login email case-sensitive | 🟡 Medium | Open |
+
+ดูรายการทั้งหมด workaround และ Bug Report Template ที่ [KNOWN_ISSUES.md](KNOWN_ISSUES.md)
+
+---
+
+## Quality Checklist
+
+ใช้ checklist นี้ก่อน commit และก่อน merge เข้า `main` (trigger deploy EC2 อัตโนมัติ)
+
+**Pre-Commit:** lint pass · ไม่มี `console.log` · ไม่มี hardcoded secret · unit tests ผ่าน · coverage ≥ 70%
+
+**Pre-Release:** E2E pass · build pass · no High severity known issue · env vars ครบ · `npm audit` clean
+
+**Post-Deploy:** production URL ใช้งานได้ · PM2 log ไม่มี error · API endpoints ตอบ 200
+
+ดู checklist เต็มที่ [QUALITY_CHECKLIST.md](QUALITY_CHECKLIST.md)
+
+---
+
+## Contributing
 
 ---
 
