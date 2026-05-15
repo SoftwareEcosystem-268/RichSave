@@ -1,13 +1,38 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)",
-      "Bash(cat:*)",
-      "Bash(npm test:*)",
-      "Bash(npx jest:*)",
-      "Bash(npm uninstall:*)",
+      "Bash(npm install)",
+      "Bash(npm install *)",
+      "Bash(npm test)",
+      "Bash(npx jest)",
+      "Bash(npx jest *)",
+      "Bash(npm uninstall *)",
+      "Bash(npm run dev)",
+      "Bash(npm run build)",
+      "Bash(npm run lint)",
+      "Bash(npm run test:e2e)",
       "Bash(npm run test:e2e:*)",
-      "Bash(npx playwright install:*)"
+      "Bash(npx playwright install)",
+      "Bash(npx playwright test *)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(taskkill /F /PM port)",
+      "Bash(netstat -ano)",
+      "Bash(findstr \":3000\")",
+      "Bash(findstr \":3001\")",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s http://localhost:3001)",
+      "Bash(node scripts/*.js)",
+      "Read(//c/Users/ASUS/Desktop/Work/alpha/**)",
+      "Bash(chmod +x scripts/run-all-tests-pdf.sh)",
+      "Bash(bash scripts/run-all-tests-pdf.sh)",
+      "Bash(tee auth-test-results.txt)",
+      "Bash(tee test-results-bugs-only.txt)",
+      "Bash(git add *)",
+      "Bash(git status)",
+      "Bash(git log)",
+      "Bash(git diff)",
+      "Bash(git commit)",
+      "Bash(git push)"
     ]
   }
 }
