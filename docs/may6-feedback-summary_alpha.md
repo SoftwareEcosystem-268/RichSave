@@ -11,6 +11,7 @@
 | Scrum Master ยังมีบทบาทในการติดตาม workflow และ coordination ภายในทีมไม่มากพอ                                   | Scrum Master เริ่มเข้ามาติดตาม progress, blocker และการสื่อสารระหว่าง Developer, QA และ DevOps มากขึ้น                                                                                       |
 | QA test ระบบล่าช้าเนื่องจากต้องรอ environment จากฝั่ง Developer และปัญหานี้ยังไม่ถูกติดตามอย่างชัดเจน           | Scrum Master เริ่มติดตาม blocker ระหว่าง Dev และ QA มากขึ้น พร้อมปรับ workflow การเตรียม environment สำหรับการ test                                                                          |
 | GitHub permission และ workflow ภายใน repository ยังไม่ชัดเจน                                                    | DevOps ปรับ GitHub permission, branch workflow และ pull request process ให้เป็นระบบมากขึ้น                                                                                                   |
+| README.md ยังเป็นภาษาอังกฤษและยังไม่สอดคล้องกับรูปแบบเอกสารที่ต้องการส่งในรายวิชา                              | ทีมปรับ README.md ให้เป็นภาษาไทย เพื่อให้รายละเอียดของโปรเจกต์ วิธีติดตั้ง วิธีใช้งาน และข้อมูลสำคัญต่าง ๆ อ่านเข้าใจง่ายและเหมาะสมกับการส่งงานมากขึ้น                                     |
 | จำนวน commit ส่วนใหญ่กระจุกอยู่ที่ DevOps (oishii4770) ขณะที่บาง role มี commit ค่อนข้างน้อย                    | DevOps มีจำนวน commit สูงจากการดูแลงาน deployment และ integration ของระบบ ขณะที่สมาชิก role อื่นได้มีการเพิ่มงานในส่วน documentation, planning และ UX/UI ตามหน้าที่ของตนเองภายในโปรเจกต์แล้ว |
 
 ## Reflection
